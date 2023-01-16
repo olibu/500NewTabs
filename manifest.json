@@ -1,0 +1,23 @@
+{
+   "manifest_version": 3,
+   "name": "500NewTabs",
+   "description": "New tab with images from 500px.com",
+   "icons": {
+      "128": "icons/icon128.png",
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+   },
+   "options_page": "src/option.html",
+   "options_ui": {
+      "page": "src/option.html"
+   },
+   "chrome_url_overrides": {
+      "newtab": "src/newtab.html"
+   },
+   "host_permissions": [
+      "https://api.500px.com/*"
+    ],
+   "permissions": [ "storage" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0.0"
+}
