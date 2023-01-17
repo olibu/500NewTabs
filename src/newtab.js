@@ -1,8 +1,30 @@
-async function updateCache() {
-    const imageUrls = await getUrls();
+async function setBackgroundImage() {
+    // set the image to the cached one
+    if (options.images.length==0) {
+        // special behavior for first time
+        await updateCache();
+    }
+
     const backgroundField = document.getElementById('background')
-    const pos = Math.floor(Math.random() * imageUrls.length);
-    backgroundField.style.background = "url(" + imageUrls[pos] + ")";	
+    const pos = Math.floor(Math.random() * options.images.length);
+    backgroundField.style.background = "url(" + options.images[pos] + ")";
+}
+
+async function updateCache() {
+    // TODO: check for last update
+    if (options.lastUpdate!==-1 && (options.lastUpdate + (1000*60*5)) > new Date().getTime() ) {
+        return;
+    }
+
+    // update the images in cache (for the next tab)
+    const imageUrls = await getUrls();
+    options.images = imageUrls;
+
+    // save new list in store
+    await chrome.storage.local.set({
+        images: imageUrls,
+        lastUpdate: new Date().getTime()
+    });
 }
 
 async function getUrls() {
@@ -61,13 +83,15 @@ function padLeft(num) {
 }
 
 let options;
-
 async function init() {
     options = await chrome.storage.local.get({
         greetings: true,
-        name: 'Your Name'
+        name: 'Your Name',
+        images: [],
+        lastUpdate: -1
       });
     setDateGreeting();
+    await setBackgroundImage();
     updateCache();
 }
 
