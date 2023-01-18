@@ -15,3 +15,7 @@ Chrome Extension to show pretty background images in new tabs.
 * Link to 500px page
 * Customization of the page via options
 * Customization of the query via options
+
+## License
+
+500NewTabs is licensed under the [MIT License](https://tldrlegal.com/l/mit)
