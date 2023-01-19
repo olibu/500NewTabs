@@ -10,5 +10,17 @@
   },
   "greeting_name": {
     "message": "Your Name"
+  },
+  "options_name": {
+    "message": "Name"
+  },
+  "options_greetings": {
+    "message": "Show greetings"
+  },
+  "options_save": {
+    "message": "save"
+  },
+  "options_saved": {
+    "message": "Options saved!"
   }
 }

@@ -4,30 +4,50 @@
   <title>Options</title>
   <style>
     body { 
-      padding: 20px; 
-      margin: 20px; 
+      padding: 10px; 
+      margin: 10px; 
     }
 
     label {
       display:block;
     }
+
+    table {
+      border: 0px;
+      padding: 5px;
+    }
   </style>
 </head>
 
 <body>
-  <label>
-    <input type="checkbox" id="greetings">
-    Show greetings
-  </label>
-  <label>
-    Name: <input type="text" id="name">
-  </label>
-
-    <br>
-  <button id="save">Save</button>
-
-  <div id="status"></div>
-
+  <table>
+    <tr>
+      <td>
+        <span data-i18n="options_greetings"></span>
+      </td>
+      <td>
+        <input type="checkbox" id="greetings">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span data-i18n="options_name"></span>: 
+      </td>
+      <td>
+        <input type="text" id="name">
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <br>
+        <button id="save" data-i18n="options_save">Save</button>
+        <span id="status"></span>
+      </td>
+    </tr>
+  </table>
+  
   <script src="options.js"></script>
+  <script src="i18n.js"></script>
 </body>
 </html>

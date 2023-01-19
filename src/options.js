@@ -8,7 +8,7 @@ function save_options() {
     }, function() {
       // Update status to let user know options were saved.
       var status = document.getElementById('status');
-      status.textContent = 'Options saved.';
+      status.textContent = chrome.i18n.getMessage('options_saved');
       setTimeout(function() {
         status.textContent = '';
       }, 750);
@@ -21,7 +21,7 @@ function save_options() {
     // Use default value color = 'red' and likesColor = true.
     chrome.storage.local.get({
       greetings: true,
-      name: 'Your Name'
+      name: chrome.i18n.getMessage('greeting_name')
     }, function(items) {
       document.getElementById('greetings').checked = items.greetings;
       document.getElementById('name').value = items.name;
