@@ -1,51 +1,20 @@
 async function setBackgroundImage() {
   // set the image to the cached one
-  if (options.images.length == 0) {
+  if (options.img.length == 0) {
+      console.log('updating cache');
     // special behavior for first time
     await updateCache();
   }
 
   const backgroundField = document.getElementById('background');
-  const pos = Math.floor(Math.random() * options.images.length);
-  backgroundField.style.background = 'url(' + options.images[pos] + ')';
-}
-
-function storeImage() {
-  var xhr = new XMLHttpRequest(),
-    blob,
-    fileReader = new FileReader();
-  let src =
-    'https://drscdn.500px.org/photo/1059807885/q%3D80_m%3D1500/v2?sig=9fdd1bda3de7b75a54ec334e78025f698a80800947fbdd197c2d41cde9fed399';
-  xhr.open('GET', src, true);
-  xhr.responseType = 'arraybuffer';
-  xhr.addEventListener(
-    'load',
-    function () {
-      if (xhr.status === 200) {
-        // Create a blob from the response
-        blob = new Blob([xhr.response], { type: 'image/png' });
-
-        // onload needed since Google Chrome doesn't support addEventListener for FileReader
-        fileReader.onload = function (evt) {
-          // Read out file contents as a Data URL
-          var result = evt.target.result;
-          // Set image src to Data URL
-          rhino.setAttribute('src', result);
-          // Store Data URL in localStorage
-          try {
-            localStorage.setItem('rhino', result);
-          } catch (e) {
-            console.log('Storage failed: ' + e);
-          }
-        };
-        // Load blob as Data URL
-        fileReader.readAsDataURL(blob);
-      }
-    },
-    false
-  );
-  // Send XHR
-  xhr.send();
+  if (options.img.length > 0) {
+    const pos = Math.floor(Math.random() * options.img.length);
+    backgroundField.style.background = 'url(' + options.img[pos] + ')';
+  }
+  else {
+    console.log('using fallback image');
+    backgroundField.style.background = 'https://drscdn.500px.org/photo/1060055355/q%3D80_m%3D1500/v2?sig=4e84ef9365c36b20f4b232f4401a5afb9312c3caca83dd6b10005ef0f5ea6ae6';
+  }
 }
 
 async function updateCache() {
@@ -56,15 +25,14 @@ async function updateCache() {
 
   // update the image
   const imageUrls = await getUrls();
-  // const pos = Math.floor(Math.random() * options.images.length);
-  // const nextImageUrl = imageUrls[pos]
-  // backgroundField.style.background = "url(" +  + ")";
-
-  options.images = imageUrls;
-
-  // save new list in store
-  await chrome.storage.local.set({
-    images: imageUrls,
+  options.img = [];
+  for (let url of imageUrls) {
+    console.log('adding image', url);
+    await addImage(url);
+  }
+  // store new images in local store
+  chrome.storage.local.set({
+    img: options.img,
     lastUpdate: new Date().getTime(),
   });
 }
@@ -90,20 +58,32 @@ async function getUrls() {
   return imageUrls;
 }
 
-function convertImageToBase64Image(img) {
-  var canvas = document.createElement('canvas');
-  canvas.width = img.width;
-  canvas.height = img.height;
-
-  var ctx = canvas.getContext('2d');
-  ctx.drawImage(img, 0, 0);
-
-  var dataURL = canvas.toDataURL('image/jpeg');
-
-  return dataURL;
-  // return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-}
-
+function addImage(url) {
+    return new Promise( resolve => {
+    var xhr = new XMLHttpRequest(),
+      blob,
+      fileReader = new FileReader();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.addEventListener(
+      'load',
+      function () {
+        if (xhr.status === 200) {
+          blob = new Blob([xhr.response], { type: 'image/png' });
+          fileReader.onload = function (evt) {
+            var result = evt.target.result;
+            options.img.push(result);
+            resolve();
+          };
+          fileReader.readAsDataURL(blob);
+        }
+      },
+      false
+    );
+    xhr.send();
+    });
+  }
+  
 async function setDateGreeting() {
   var timeField = document.getElementById('time');
   var greetingField = document.getElementById('greeting');
@@ -142,8 +122,8 @@ let options;
 async function init() {
   options = await chrome.storage.local.get({
     greetings: true,
-    name: 'Your Name',
-    images: [],
+    name: chrome.i18n.getMessage('greeting_name'),
+    img: [],
     lastUpdate: -1,
   });
   setDateGreeting();
@@ -153,7 +133,5 @@ async function init() {
 
 (function () {
   'use strict';
-
-  //   storeImage();
   init();
 })();
