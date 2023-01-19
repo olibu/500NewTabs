@@ -22,5 +22,8 @@
   },
   "options_saved": {
     "message": "Options saved!"
+  },
+  "options_interval": {
+    "message": "Update interval"
   }
 }

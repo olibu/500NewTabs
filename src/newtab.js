@@ -1,11 +1,10 @@
 async function setBackgroundImage() {
   // set the image to the cached one
   if (options.img.length == 0) {
-      console.log('updating cache');
     // special behavior for first time
     await updateCache();
   }
-
+  
   const backgroundField = document.getElementById('background');
   if (options.img.length > 0) {
     const pos = Math.floor(Math.random() * options.img.length);
@@ -19,15 +18,17 @@ async function setBackgroundImage() {
 
 async function updateCache() {
   // check for last update
-  if (options.lastUpdate !== -1 && options.lastUpdate + 1000 * 60 * 5 > new Date().getTime()) {
+  if (options.lastUpdate !== -1 && options.lastUpdate + 1000 * 60 * options.interval > new Date().getTime()) {
     return;
   }
-
+  
+  console.log('updating cache');
+  
   // update the image
   const imageUrls = await getUrls();
   options.img = [];
   for (let url of imageUrls) {
-    console.log('adding image', url);
+    // console.log('adding image', url);
     await addImage(url);
   }
   // store new images in local store
@@ -125,6 +126,7 @@ async function init() {
     name: chrome.i18n.getMessage('greeting_name'),
     img: [],
     lastUpdate: -1,
+    interval: 60
   });
   setDateGreeting();
   await setBackgroundImage();
