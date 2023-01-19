@@ -1,14 +1,14 @@
 {
-    "greeting_morning": {
-        "message": "Good morning, "
-    },
-    "greeting_afternoon": {
-        "message": "Good afternoon, "
-    },
-    "greeting_evening": {
-        "message": "Good evening, $1"
-    },
-    "greeting_name": {
-        "message": "Your Name"
-    }
+  "greeting_morning": {
+    "message": "Good morning,  $1"
+  },
+  "greeting_afternoon": {
+    "message": "Good afternoon,  $1"
+  },
+  "greeting_evening": {
+    "message": "Good evening, $1"
+  },
+  "greeting_name": {
+    "message": "Your Name"
+  }
 }
