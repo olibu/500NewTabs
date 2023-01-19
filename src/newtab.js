@@ -23,19 +23,24 @@ async function updateCache() {
   }
   
   console.log('updating cache');
-  
-  // update the image
-  const imageUrls = await getUrls();
-  options.img = [];
-  for (let url of imageUrls) {
-    // console.log('adding image', url);
-    await addImage(url);
+
+  try {
+    // update the image
+    const imageUrls = await getUrls();
+    options.img = [];
+    for (let url of imageUrls) {
+      // console.log('adding image', url);
+      await addImage(url);
+    }
+    // store new images in local store
+    chrome.storage.local.set({
+      img: options.img,
+      lastUpdate: new Date().getTime(),
+    });
   }
-  // store new images in local store
-  chrome.storage.local.set({
-    img: options.img,
-    lastUpdate: new Date().getTime(),
-  });
+  catch(e) {
+    console.log('Not possible to update cache');
+  }
 }
 
 async function getUrls() {
