@@ -52,26 +52,26 @@ Popular query:
   },
   "query":"query DiscoverQueryRendererQuery($filters: [PhotoDiscoverSearchFilter!], $sort: PhotoDiscoverSort) 
   {...DiscoverPaginationContainer_query_1OEZSy } fragment DiscoverPaginationContainer_query_1OEZSy on Query { 
-	  photos: photoDiscoverSearch(first: 20, filters: $filters, sort: $sort) { 
-		  edges { 
-			  node { 
+    photos: photoDiscoverSearch(first: 20, filters: $filters, sort: $sort) { 
+      edges { 
+        node { 
           canonicalPath
           notSafeForWork 
           photographer: uploader {
               displayName
           }
-					images(sizes: [35]) {
-						size
-						jpegUrl
-					}
-				}
-			}
-			pageInfo {
-				endCursor
-				hasNextPage
-			}
-		}
-	}"
+          images(sizes: [35]) {
+            size
+            jpegUrl
+          }
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }"
 }
 ```
 
