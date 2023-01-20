@@ -16,15 +16,18 @@ The default page is, how to say? The default page. The pictures are nice and it 
 
 # Functionality
 
-* One of the cached image is shown as new tab background image
-* A new image will be downloaded form 500px in case of
-  * If the image is older than x hour
+* One out of 10 cached image is shown as new tab background image
+* A new image will be downloaded from 500px in case of
+  * the image cache is older than x minutes (configurable update interval)
+* Images are provided by [my gallery](https://500px.com/p/olibu/galleries/500NewTabs) or discovery mode
+* Your name can be defined in options
+* Greetings can be hidden to have a even more clean UI
 
 # Future Features
 
 * Link to 500px page
-* Customization of the page via options
-* Customization of the query via options
+* only update the cache if new images are available
+* force cache update in options page
 
 ## Disclaimer
 
