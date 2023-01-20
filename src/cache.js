@@ -9,6 +9,7 @@ async function loadOptions() {
     discover: false,
     name: chrome.i18n.getMessage('greeting_name'),
     img: [],
+    imgUrl: [],
     lastUpdate: -1,
     interval: 60,
   });
@@ -27,14 +28,22 @@ async function updateCache(forceUpdate = false) {
   try {
     // update the image
     const imageUrls = await getUrls();
-    options.img = [];
     for (let url of imageUrls) {
-      // console.log('adding image', url);
-      await addImage(url);
+      if (!options.imgUrl.includes(url)) {
+        // console.log('adding image', url);
+        await addImage(url);
+      }
     }
+    // reduces size of cache
+    while (options.img.length > 10) {
+      // console.log('remove first element from cache');
+      options.img.shift();
+    }
+
     // store new images in local store
     chrome.storage.local.set({
       img: options.img,
+      imgUrl: options.imgUrl,
       lastUpdate: new Date().getTime(),
     });
   } catch (e) {
@@ -64,7 +73,7 @@ async function getUrls() {
   if (options.discover) {
     for (let node of result.data.photos.edges) {
       const url = node.node.images[0].jpegUrl;
-      console.log(url);
+      // console.log(url);
       if (!url) {
         throw new Error('jpegUrl not found in response');
       }
@@ -98,6 +107,7 @@ function addImage(url) {
           fileReader.onload = function (evt) {
             var result = evt.target.result;
             options.img.push(result);
+            options.imgUrl.push(url);
             resolve();
           };
           fileReader.readAsDataURL(blob);

@@ -23,11 +23,11 @@ The default page is, how to say? The default page. The pictures are nice and it 
 * Your name can be defined in options
 * Greetings can be hidden to have a even more clean UI
 * Force cache update in options page
+* Images in cache are only updated if new images are available
 
 # Future Features
 
 * Link to 500px page
-* only update the cache if new images are available
 
 ## Disclaimer
 
