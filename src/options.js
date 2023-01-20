@@ -1,11 +1,13 @@
 // Saves options to chrome.storage
 function save_options() {
   var greetings = document.getElementById('greetings').checked;
+  var discover = document.getElementById('discover').checked;
   var name = document.getElementById('name').value;
   var interval = parseInt(document.getElementById('interval').value);
   chrome.storage.local.set(
     {
       greetings: greetings,
+      discover: discover,
       name: name,
       interval: interval,
     },
@@ -27,11 +29,13 @@ function restore_options() {
   chrome.storage.local.get(
     {
       greetings: true,
+      discover: false,
       name: chrome.i18n.getMessage('greeting_name'),
       interval: 60,
     },
     function (items) {
       document.getElementById('greetings').checked = items.greetings;
+      document.getElementById('discover').checked = items.discover;
       document.getElementById('name').value = items.name;
       document.getElementById('interval').value = items.interval;
     }

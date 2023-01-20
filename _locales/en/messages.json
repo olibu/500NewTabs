@@ -25,5 +25,8 @@
   },
   "options_interval": {
     "message": "Update interval"
+  },
+  "options_discover": {
+    "message": "Discover images instead of gallery"
   }
 }
