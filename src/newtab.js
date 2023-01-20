@@ -4,15 +4,17 @@ async function setBackgroundImage() {
     // special behavior for first time
     await updateCache();
   }
-  
+
   const backgroundField = document.getElementById('background');
   if (options.img.length > 0) {
     const pos = Math.floor(Math.random() * options.img.length);
     backgroundField.style.background = 'url(' + options.img[pos] + ')';
-  }
-  else {
+  } else {
     console.log('using fallback image');
-    backgroundField.style.background = 'https://drscdn.500px.org/photo/1060055355/q%3D80_m%3D1500/v2?sig=4e84ef9365c36b20f4b232f4401a5afb9312c3caca83dd6b10005ef0f5ea6ae6';
+    backgroundField.style.background =
+      'url(' +
+      'https://drscdn.500px.org/photo/1060055355/q%3D80_m%3D1500/v2?sig=4e84ef9365c36b20f4b232f4401a5afb9312c3caca83dd6b10005ef0f5ea6ae6' +
+      ')';
   }
 }
 
@@ -21,7 +23,7 @@ async function updateCache() {
   if (options.lastUpdate !== -1 && options.lastUpdate + 1000 * 60 * options.interval > new Date().getTime()) {
     return;
   }
-  
+
   console.log('updating cache');
 
   try {
@@ -37,8 +39,7 @@ async function updateCache() {
       img: options.img,
       lastUpdate: new Date().getTime(),
     });
-  }
-  catch(e) {
+  } catch (e) {
     console.log('Not possible to update cache');
   }
 }
@@ -65,7 +66,7 @@ async function getUrls() {
 }
 
 function addImage(url) {
-    return new Promise( resolve => {
+  return new Promise(resolve => {
     var xhr = new XMLHttpRequest(),
       blob,
       fileReader = new FileReader();
@@ -87,9 +88,9 @@ function addImage(url) {
       false
     );
     xhr.send();
-    });
-  }
-  
+  });
+}
+
 async function setDateGreeting() {
   var timeField = document.getElementById('time');
   var greetingField = document.getElementById('greeting');
@@ -131,7 +132,7 @@ async function init() {
     name: chrome.i18n.getMessage('greeting_name'),
     img: [],
     lastUpdate: -1,
-    interval: 60
+    interval: 60,
   });
   setDateGreeting();
   await setBackgroundImage();
