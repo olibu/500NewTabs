@@ -22,12 +22,12 @@ The default page is, how to say? The default page. The pictures are nice and it 
 * Images are provided by [my gallery](https://500px.com/p/olibu/galleries/500NewTabs) or discovery mode
 * Your name can be defined in options
 * Greetings can be hidden to have a even more clean UI
+* Force cache update in options page
 
 # Future Features
 
 * Link to 500px page
 * only update the cache if new images are available
-* force cache update in options page
 
 ## Disclaimer
 

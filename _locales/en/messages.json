@@ -28,5 +28,14 @@
   },
   "options_discover": {
     "message": "Discover images instead of gallery"
+  },
+  "options_update": {
+    "message": "update cache"
+  },
+  "options_update_ok": {
+    "message": "Cache updated!"
+  },
+  "options_update_error": {
+    "message": "Cache update failed!"
   }
 }

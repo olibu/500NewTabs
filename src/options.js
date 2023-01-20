@@ -13,13 +13,18 @@ function save_options() {
     },
     function () {
       // Update status to let user know options were saved.
-      var status = document.getElementById('status');
-      status.textContent = chrome.i18n.getMessage('options_saved');
-      setTimeout(function () {
-        status.textContent = '';
-      }, 750);
+      showStatus(chrome.i18n.getMessage('options_saved'));
     }
   );
+}
+
+// show text in status span for 2 seconds
+function showStatus(text) {
+  var status = document.getElementById('status');
+  status.textContent = text;
+  setTimeout(function () {
+    status.textContent = '';
+  }, 2000);
 }
 
 // Restores options using the preferences
@@ -41,5 +46,18 @@ function restore_options() {
     }
   );
 }
+
+// update the image cache
+async function update_cache() {
+  try {
+    await updateCache(true);
+    showStatus(chrome.i18n.getMessage('options_update_ok'));
+  }
+  catch (e) {
+    showStatus(chrome.i18n.getMessage('options_update_error'));
+  }
+}
+
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
+document.getElementById('update').addEventListener('click', update_cache);
