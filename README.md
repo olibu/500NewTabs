@@ -25,6 +25,107 @@ The default page is, how to say? The default page. The pictures are nice and it 
 * Images in cache are only updated if new images are available
 * Link to 500px.com to support the photographer
 
+## 500px queries
+
+In case you are interested in some technical details you can find the graphql queries for the images here.
+
+Popular query:
+```
+{
+  "operationName": "DiscoverQueryRendererQuery",
+  "variables": {
+    "filters": [
+      {
+        "key":"FEATURE_NAME",
+        "value":"popular"
+      },
+      {
+        "key":"CATEGORY",
+        "value":"8"
+      },
+      {
+        "key":"FOLLOWERS_COUNT",
+        "value":"gte:0"
+      }
+    ],
+    "sort":"POPULAR_PULSE"
+  },
+  "query":"query DiscoverQueryRendererQuery($filters: [PhotoDiscoverSearchFilter!], $sort: PhotoDiscoverSort) 
+  {...DiscoverPaginationContainer_query_1OEZSy } fragment DiscoverPaginationContainer_query_1OEZSy on Query { 
+	  photos: photoDiscoverSearch(first: 20, filters: $filters, sort: $sort) { 
+		  edges { 
+			  node { 
+          canonicalPath
+          notSafeForWork 
+          photographer: uploader {
+              displayName
+          }
+					images(sizes: [35]) {
+						size
+						jpegUrl
+					}
+				}
+			}
+			pageInfo {
+				endCursor
+				hasNextPage
+			}
+		}
+	}"
+}
+```
+
+Gallery query:
+```
+{
+  "operationName":"GalleriesDetailQueryRendererQuery","variables":{
+    "ownerLegacyId":"1006727773","slug":"500NewTabs","token":null,"pageSize":10,"showNude":true
+  },
+  "query":"query GalleriesDetailQueryRendererQuery(
+    $ownerLegacyId: String, 
+    $slug: String, 
+    $token: String, 
+    $pageSize: Int, 
+    $showNude: Boolean
+  ) {
+    gallery: galleryByOwnerIdAndSlugOrToken(ownerLegacyId: $ownerLegacyId, slug: $slug, token: $token) {
+      ...GalleriesDetailPaginationContainer_gallery_15zZXN
+      id
+    }
+  }
+  fragment GalleriesDetailPaginationContainer_gallery_15zZXN on Gallery {
+    id
+    legacyId
+    photos(first: $pageSize, showNude: $showNude) {
+      totalCount
+      edges {
+        cursor
+        node {
+          id
+          legacyId
+          canonicalPath
+          notSafeForWork
+          photographer: uploader {
+            id
+            legacyId
+            username
+            displayName
+          }
+          images(sizes: [35]) {
+            size
+            jpegUrl
+          }
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }"
+}
+```
+
 ## Disclaimer
 
 This extension is no afilitate with Goolge, 500px.com or any other pice of software mentioned at this site. It may stop working as soon a the backend API used by the 500px web page change.
