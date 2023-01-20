@@ -128,7 +128,7 @@ Gallery query:
 
 ## Disclaimer
 
-This extension is no afilitate with Goolge, 500px.com or any other pice of software mentioned at this site. It may stop working as soon a the backend API used by the 500px web page change.
+This extension is not affiliated with Goolge, 500px.com or any other pice of software mentioned at this site. It may stop working as soon as the backend API from the 500px web page changes.
 
 ## License
 
