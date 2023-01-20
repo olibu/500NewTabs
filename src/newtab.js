@@ -5,13 +5,20 @@ async function setBackgroundImage() {
     await updateCache();
   }
 
+  // console.log(`${options.img.length} cached images available`);
+
   const backgroundField = document.getElementById('background');
+  const authorField = document.getElementById('author');
   if (options.img.length > 0) {
     const pos = Math.floor(Math.random() * options.img.length);
     backgroundField.style.background = 'url(' + options.img[pos] + ')';
+    authorField.innerHTML = '	&copy; ' + options.author[pos].name;
+    authorField.href = 'https://500px.com' + options.author[pos].link;
   } else {
     console.log('using fallback image');
-    backgroundField.style.background = 'url(' + 'https://drscdn.500px.org/photo/1060055355/q%3D80_m%3D1500/v2?sig=4e84ef9365c36b20f4b232f4401a5afb9312c3caca83dd6b10005ef0f5ea6ae6' + ')';
+    backgroundField.style.background = 'url(https://drscdn.500px.org/photo/1056423963/q%3D80_m%3D1500/v2?sig=a993b8c8e37a40ffe3102b1c34e335014ac0b958fa032250e791c8638b3c5ae5)';
+    authorField.innerHTML = '	&copy; olibu';
+    authorField.href = 'https://500px.com/photo/1056423963/i-love-leafs-by-olibu';
   }
 }
 
