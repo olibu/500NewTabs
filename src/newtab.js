@@ -11,10 +11,7 @@ async function setBackgroundImage() {
     backgroundField.style.background = 'url(' + options.img[pos] + ')';
   } else {
     console.log('using fallback image');
-    backgroundField.style.background =
-      'url(' +
-      'https://drscdn.500px.org/photo/1060055355/q%3D80_m%3D1500/v2?sig=4e84ef9365c36b20f4b232f4401a5afb9312c3caca83dd6b10005ef0f5ea6ae6' +
-      ')';
+    backgroundField.style.background = 'url(' + 'https://drscdn.500px.org/photo/1060055355/q%3D80_m%3D1500/v2?sig=4e84ef9365c36b20f4b232f4401a5afb9312c3caca83dd6b10005ef0f5ea6ae6' + ')';
   }
 }
 
@@ -66,7 +63,7 @@ async function getUrls() {
 }
 
 function addImage(url) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     var xhr = new XMLHttpRequest(),
       blob,
       fileReader = new FileReader();
