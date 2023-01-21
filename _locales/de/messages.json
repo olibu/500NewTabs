@@ -1,0 +1,41 @@
+{
+  "greeting_morning": {
+    "message": "Guten Morgen,  $1"
+  },
+  "greeting_afternoon": {
+    "message": "Guten Tag,  $1"
+  },
+  "greeting_evening": {
+    "message": "Guten Abend, $1"
+  },
+  "greeting_name": {
+    "message": "Dein Name"
+  },
+  "options_name": {
+    "message": "Name"
+  },
+  "options_greetings": {
+    "message": "Begrüßung anzeigen"
+  },
+  "options_save": {
+    "message": "speichern"
+  },
+  "options_saved": {
+    "message": "Optionen wurden gespeichert!"
+  },
+  "options_interval": {
+    "message": "Aktuallisierungsperiode"
+  },
+  "options_discover": {
+    "message": "Aktuelle Bilder anstelle der Gallerie anzeigen"
+  },
+  "options_update": {
+    "message": "Cache aktuallisieren"
+  },
+  "options_update_ok": {
+    "message": "Cache wurde aktuallisiert!"
+  },
+  "options_update_error": {
+    "message": "Cache konnte nicht aktuallisiert werden!"
+  }
+}
