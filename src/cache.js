@@ -11,8 +11,6 @@ async function loadOptions() {
     discover: false,
     name: chrome.i18n.getMessage('greeting_name'),
     img: [],
-    imgUrl: [],
-    author: [],
     lastUpdate: -1,
     interval: 60,
   });
@@ -33,7 +31,7 @@ async function updateCache(forceUpdate = false) {
     const images = await getImages();
     // console.log('Images from 500px: ', images);
     for (let image of images) {
-      if (!options.imgUrl.includes(image.url)) {
+      if (!includesAttribValue(options.img, 'url', image.url)) {
         // console.log('adding image', image);
         await addImage(image);
       }
@@ -42,15 +40,11 @@ async function updateCache(forceUpdate = false) {
     while (options.img.length > MAX_IMAGES) {
       // console.log('remove first element from cache');
       options.img.shift();
-      options.imgUrl.shift();
-      options.author.shift();
     }
 
     // store new images in local store
     chrome.storage.local.set({
       img: options.img,
-      imgUrl: options.imgUrl,
-      author: options.author,
       lastUpdate: new Date().getTime(),
     });
   } catch (e) {
@@ -58,6 +52,7 @@ async function updateCache(forceUpdate = false) {
   }
 }
 
+// get a list of images inclduding url, author and link from 500px.com
 async function getImages() {
   const images = [];
   let query =
@@ -106,6 +101,7 @@ async function getImages() {
   return images;
 }
 
+// Load the image from the image.url and add it to the cache
 function addImage(image) {
   return new Promise((resolve) => {
     var xhr = new XMLHttpRequest(),
@@ -120,9 +116,7 @@ function addImage(image) {
           blob = new Blob([xhr.response], { type: 'image/png' });
           fileReader.onload = function (evt) {
             var result = evt.target.result;
-            options.img.push(result);
-            options.imgUrl.push(image.url);
-            options.author.push({ name: image.author, link: image.link });
+            options.img.push({data: result, url: image.url, author: image.author, link: image.link});
             resolve();
           };
           fileReader.readAsDataURL(blob);
@@ -132,4 +126,13 @@ function addImage(image) {
     );
     xhr.send();
   });
+}
+
+function includesAttribValue(array, attr, value) {
+  for (let a of array) {
+    if (a[attr] === value) {
+      return true;
+    }
+  }
+  return false;
 }

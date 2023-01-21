@@ -11,9 +11,9 @@ async function setBackgroundImage() {
   const authorField = document.getElementById('author');
   if (options.img.length > 0) {
     const pos = Math.floor(Math.random() * options.img.length);
-    backgroundField.style.background = 'url(' + options.img[pos] + ')';
-    authorField.innerHTML = '	&copy; ' + options.author[pos].name;
-    authorField.href = 'https://500px.com' + options.author[pos].link;
+    backgroundField.style.background = 'url(' + options.img[pos].data + ')';
+    authorField.innerHTML = '	&copy; ' + options.img[pos].author;
+    authorField.href = 'https://500px.com' + options.img[pos].link;
   } else {
     console.log('using fallback image');
     backgroundField.style.background = 'url(https://drscdn.500px.org/photo/1056423963/q%3D80_m%3D1500/v2?sig=a993b8c8e37a40ffe3102b1c34e335014ac0b958fa032250e791c8638b3c5ae5)';
