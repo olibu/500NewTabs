@@ -2,6 +2,8 @@
 
 Chrome Extension to show pretty background images in new tabs from the 500px.com web page.
 
+![Screenshot](screenshot.png)
+
 # Why another extension?
 
 There are already a lot of such extensions. I've used [Moment](https://chrome.google.com/webstore/detail/moment-1-personal-dashboa/lgecddhfcfhlmllljooldkbbijdcnlpe) for a very long time. 500px.com has [it's own extension](https://chrome.google.com/webstore/detail/500px-photo-new-tab-inspi/clbaflfnbbbgjppjogdmnhkgpiijamdg) already. And even the default Chrome New Tab pages shows nice pictures.
