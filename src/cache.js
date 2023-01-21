@@ -80,8 +80,7 @@ async function getImages() {
   let nodes;
   if (options.discover) {
     nodes = result.data.photos.edges;
-  }
-  else {
+  } else {
     nodes = result.data.gallery.photos.edges;
   }
   let count = 0;
@@ -101,7 +100,7 @@ async function getImages() {
     if (!url) {
       throw new Error('jpegUrl not found in response');
     }
-    images.push({url: url, author: author, link: link});
+    images.push({ url: url, author: author, link: link });
     // console.log({url: url, author: author, link: link});
   }
   return images;
@@ -123,7 +122,7 @@ function addImage(image) {
             var result = evt.target.result;
             options.img.push(result);
             options.imgUrl.push(image.url);
-            options.author.push({name: image.author, link: image.link});
+            options.author.push({ name: image.author, link: image.link });
             resolve();
           };
           fileReader.readAsDataURL(blob);

@@ -52,8 +52,7 @@ async function update_cache() {
   try {
     await updateCache(true);
     showStatus(chrome.i18n.getMessage('options_update_ok'));
-  }
-  catch (e) {
+  } catch (e) {
     showStatus(chrome.i18n.getMessage('options_update_error'));
   }
 }
