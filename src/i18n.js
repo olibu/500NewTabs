@@ -1,12 +1,10 @@
-(function() {
-    window.addEventListener('load', function() {
-        var needsTranslation = document.querySelectorAll("[data-i18n]"),
-            t = chrome.i18n.getMessage;
-        for (var i = 0, l = needsTranslation.length; i < l; i++) {
-            var element = needsTranslation[i]
-            element.innerHTML = t(element.dataset.i18n);
-        }
-    });
-    
+(function () {
+  window.addEventListener('load', function () {
+    const toTranslate = document.querySelectorAll('[data-i18n]');
+    const translate = chrome.i18n.getMessage;
+    for (var i = 0, l = toTranslate.length; i < l; i++) {
+      var element = toTranslate[i];
+      element.innerHTML = translate(element.dataset.i18n);
     }
-).call(this);
+  });
+}.call(this));
