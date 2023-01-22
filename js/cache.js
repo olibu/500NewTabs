@@ -136,3 +136,9 @@ function includesAttribValue(array, attr, value) {
   }
   return false;
 }
+
+export {
+  loadOptions,
+  options,
+  updateCache
+}

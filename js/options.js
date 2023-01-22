@@ -1,3 +1,5 @@
+import { loadOptions, options, updateCache } from '@/cache.js';
+
 // Saves options to chrome.storage
 function save_options() {
   var greetings = document.getElementById('greetings').checked;

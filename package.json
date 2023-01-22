@@ -1,0 +1,13 @@
+{
+  "name": "500-new-tabs-build",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite build --sourcemap",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0"
+  }
+}

@@ -7,12 +7,12 @@
       "16": "icons/icon16.png",
       "48": "icons/icon48.png"
    },
-   "options_page": "src/option.html",
+   "options_page": "option.html",
    "options_ui": {
-      "page": "src/option.html"
+      "page": "option.html"
    },
    "chrome_url_overrides": {
-      "newtab": "src/newtab.html"
+      "newtab": "newtab.html"
    },
    "host_permissions": [
       "https://api.500px.com/*",

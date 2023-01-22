@@ -1,3 +1,5 @@
+import { loadOptions, options, updateCache } from '@/cache.js';
+
 async function setBackgroundImage() {
   // set the image to the cached one
   if (options.img.length == 0) {
