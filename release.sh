@@ -37,4 +37,5 @@ npm run build
 jq '.version="'$release'"'  dist/manifest.json > dist/manifest2.json
 mv dist/manifest2.json dist/manifest.json
 cd dist
+find . -name ".DS_Store" -delete 
 zip -r ../releases/500NewTabs_$tag.zip ./ 
