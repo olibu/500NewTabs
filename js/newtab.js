@@ -18,9 +18,10 @@ async function setBackgroundImage() {
     authorField.href = 'https://500px.com' + options.img[pos].link;
   } else {
     console.log('using fallback image');
-    backgroundField.style.background = 'url(https://drscdn.500px.org/photo/1056423963/q%3D80_m%3D1500/v2?sig=a993b8c8e37a40ffe3102b1c34e335014ac0b958fa032250e791c8638b3c5ae5)';
+    const imgUrl = new URL('../img/bg.jpeg', import.meta.url).href
+    backgroundField.style.background = 'url(' + imgUrl + ')';
     authorField.innerHTML = '&copy; olibu';
-    authorField.href = 'https://500px.com/photo/1056423963/i-love-leafs-by-olibu';
+    authorField.href = 'https://500px.com/photo/1059193515/bookshelfs-in-the-abbey-of-neustift-by-olibu';
   }
 }
 
