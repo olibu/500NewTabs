@@ -8,7 +8,9 @@ async function loadOptions() {
 
   options = await chrome.storage.local.get({
     greetings: true,
-    discover: false,
+    safemode: true,
+    discover: 'gallery',
+    discoverCat: "8",
     name: chrome.i18n.getMessage('greeting_name'),
     img: [],
     lastUpdate: -1,
@@ -57,9 +59,17 @@ async function getImages() {
   const images = [];
   let query =
     '{ "operationName":"GalleriesDetailQueryRendererQuery","variables":{ "ownerLegacyId":"1006727773","slug":"500NewTabs","token":null,"pageSize":20,"showNude":true }, "query":"query GalleriesDetailQueryRendererQuery( $ownerLegacyId: String, $slug: String, $token: String, $pageSize: Int, $showNude: Boolean ) { gallery: galleryByOwnerIdAndSlugOrToken(ownerLegacyId: $ownerLegacyId, slug: $slug, token: $token) { ...GalleriesDetailPaginationContainer_gallery_15zZXN id } } fragment GalleriesDetailPaginationContainer_gallery_15zZXN on Gallery { id legacyId photos(first: $pageSize, showNude: $showNude) { totalCount edges { cursor node { id legacyId canonicalPath notSafeForWork photographer: uploader { id legacyId username displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }';
-  if (options.discover) {
+  if (options.discover != 'gallery') {
+    let feature ='';
+    if (options.discover !== '') {
+      feature = `{ "key":"FEATURE_NAME", "value":"${options.discover}" }, `
+    }
+    let category = '';
+    if (options.discoverCat !== "0") {
+      category = `{ "key":"CATEGORY", "value":"${options.discoverCat}" }, `
+    }
     query =
-      '{ "operationName": "DiscoverQueryRendererQuery", "variables": { "filters": [ { "key":"FEATURE_NAME", "value":"popular" }, { "key":"CATEGORY", "value":"8" }, { "key":"FOLLOWERS_COUNT", "value":"gte:0" } ], "sort":"POPULAR_PULSE" }, "query":"query DiscoverQueryRendererQuery($filters: [PhotoDiscoverSearchFilter!], $sort: PhotoDiscoverSort) {...DiscoverPaginationContainer_query_1OEZSy } fragment DiscoverPaginationContainer_query_1OEZSy on Query { photos: photoDiscoverSearch(first: 20, filters: $filters, sort: $sort) { edges { node { canonicalPath notSafeForWork photographer: uploader { displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }';
+      `{ "operationName": "DiscoverQueryRendererQuery", "variables": { "filters": [ ${feature} ${category} { "key":"FOLLOWERS_COUNT", "value":"gte:1" } ], "sort":"POPULAR_PULSE" }, "query":"query DiscoverQueryRendererQuery($filters: [PhotoDiscoverSearchFilter!], $sort: PhotoDiscoverSort) {...DiscoverPaginationContainer_query_1OEZSy } fragment DiscoverPaginationContainer_query_1OEZSy on Query { photos: photoDiscoverSearch(first: 20, filters: $filters, sort: $sort) { edges { node { canonicalPath notSafeForWork photographer: uploader { displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }`;
   }
   const res = await fetch('https://api.500px.com/graphql', {
     headers: {
@@ -73,10 +83,10 @@ async function getImages() {
   const result = await res.json();
   // console.log(JSON.stringify( result, ' ', 2));
   let nodes;
-  if (options.discover) {
-    nodes = result.data.photos.edges;
-  } else {
+  if (options.discover === 'gallery') {
     nodes = result.data.gallery.photos.edges;
+  } else {
+    nodes = result.data.photos.edges;
   }
   let count = 0;
   for (let node of nodes) {
@@ -84,9 +94,11 @@ async function getImages() {
       break;
     }
     // ignore images which are "not safe"
-    if (node.node.notSafeForWork) {
-      console.log('ignoring image as of safe mode');
-      continue;
+    if (options.safemode) {
+      if (node.node.notSafeForWork) {
+        console.log('ignoring image as of safe mode');
+        continue;
+      }
     }
     const url = node.node.images[0].jpegUrl;
     const author = node.node.photographer.displayName;

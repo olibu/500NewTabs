@@ -14,6 +14,9 @@
   "options_name": {
     "message": "Name"
   },
+  "options_safemode": {
+    "message": "Safemode"
+  },
   "options_greetings": {
     "message": "Show greetings"
   },
@@ -27,7 +30,7 @@
     "message": "Update interval"
   },
   "options_discover": {
-    "message": "Discover images instead of gallery"
+    "message": "Image source"
   },
   "options_update": {
     "message": "update cache"
@@ -37,5 +40,122 @@
   },
   "options_update_error": {
     "message": "Cache update failed!"
+  },
+  "options_discover_1": {
+    "message": "Gallery 500NewTabs"
+  },
+  "options_discover_2": {
+    "message": "Popular"
+  },
+  "options_discover_3": {
+    "message": "Upcoming"
+  },
+  "options_discover_4": {
+    "message": "Fresh"
+  },
+  "options_discover_5": {
+    "message": "Editors Choice"
+  },
+  "options_discover_6": {
+    "message": "-- All ---"
+  },
+  "options_discover_category": {
+    "message": "Category"
+  },
+  "options_discover_cat_0": {
+    "message": "--- All ---"
+  },
+  "options_discover_cat_8": {
+    "message": "Landscapes"
+  },
+  "options_discover_cat_1": {
+    "message": "Celebrities"
+  },
+  "options_discover_cat_2": {
+    "message": "Film"
+  },
+  "options_discover_cat_3": {
+    "message": "Journalism"
+  },
+  "options_discover_cat_4": {
+    "message": "Nude"
+  },
+  "options_discover_cat_5": {
+    "message": "Black & White"
+  },
+  "options_discover_cat_6": {
+    "message": "Still Life"
+  },
+  "options_discover_cat_7": {
+    "message": "People"
+  },
+  "options_discover_cat_9": {
+    "message": "City & Architecture"
+  },
+  "options_discover_cat_10": {
+    "message": "Abstract"
+  },
+  "options_discover_cat_11": {
+    "message": "Animals"
+  },
+  "options_discover_cat_12": {
+    "message": "Macro"
+  },
+  "options_discover_cat_13": {
+    "message": "Travel"
+  },
+  "options_discover_cat_14": {
+    "message": "Fashion"
+  },
+  "options_discover_cat_15": {
+    "message": "Commercial"
+  },
+  "options_discover_cat_16": {
+    "message": "Concert"
+  },
+  "options_discover_cat_17": {
+    "message": "Sport"
+  },
+  "options_discover_cat_18": {
+    "message": "Nature"
+  },
+  "options_discover_cat_19": {
+    "message": "Performing Arts"
+  },
+  "options_discover_cat_20": {
+    "message": "Family"
+  },
+  "options_discover_cat_21": {
+    "message": "Street"
+  },
+  "options_discover_cat_22": {
+    "message": "Underwater"
+  },
+  "options_discover_cat_23": {
+    "message": "Food"
+  },
+  "options_discover_cat_24": {
+    "message": "Fine Art"
+  },
+  "options_discover_cat_25": {
+    "message": "Wedding"
+  },
+  "options_discover_cat_26": {
+    "message": "Transportation"
+  },
+  "options_discover_cat_27": {
+    "message": "Urban Exploration"
+  },
+  "options_discover_cat_28": {
+    "message": ""
+  },
+  "options_discover_cat_29": {
+    "message": "Aerial"
+  },
+  "options_discover_cat_30": {
+    "message": "Night"
+  },
+  "options_discover_cat_31": {
+    "message": "Boudoir"
   }
 }

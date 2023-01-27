@@ -31,10 +31,35 @@
     </tr>
     <tr>
       <td>
-        <span data-i18n="options_discover"></span>
+        <span data-i18n="options_discover">Discover</span>
       </td>
       <td>
-        <input type="checkbox" id="discover">
+        <select id="discover">
+          <option value="gallery" data-i18n="options_discover_1">Gallery</option>
+          <option value="" data-i18n="options_discover_6">All</option>
+          <option value="popular" data-i18n="options_discover_2">Popular</option>
+          <option value="upcoming" data-i18n="options_discover_3">Upcoming</option>
+          <option value="fresh" data-i18n="options_discover_4">Fresh</option>
+          <option value="editors" data-i18n="options_discover_5">Editors Choice</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span data-i18n="options_discover_category">Category</span>
+      </td>
+      <td>
+        <select id="discover_cat">
+          <option value="0" data-i18n="options_discover_cat_0">all</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span data-i18n="options_safemode"></span>
+      </td>
+      <td>
+        <input type="checkbox" id="safemode">
       </td>
     </tr>
     <tr>

@@ -14,6 +14,9 @@
   "options_name": {
     "message": "Name"
   },
+  "options_safemode": {
+    "message": "Keine anstößige Bilder anzeigen"
+  },
   "options_greetings": {
     "message": "Begrüßung anzeigen"
   },
@@ -27,7 +30,7 @@
     "message": "Aktuallisierungsperiode"
   },
   "options_discover": {
-    "message": "Aktuelle Bilder anstelle der Gallerie anzeigen"
+    "message": "Bildquelle"
   },
   "options_update": {
     "message": "Cache aktuallisieren"
@@ -37,5 +40,122 @@
   },
   "options_update_error": {
     "message": "Cache konnte nicht aktuallisiert werden!"
+  },
+  "options_discover_1": {
+    "message": "Gallerie 500NewTabs"
+  },
+  "options_discover_2": {
+    "message": "Beliebte Bilder"
+  },
+  "options_discover_3": {
+    "message": "Trend Bilder"
+  },
+  "options_discover_4": {
+    "message": "Neue Bilder"
+  },
+  "options_discover_5": {
+    "message": "Ausgewählte Bilder"
+  },
+  "options_discover_6": {
+    "message": "-- Alle ---"
+  },
+  "options_discover_category": {
+    "message": "Categorie"
+  },
+  "options_discover_cat_0": {
+    "message": "--- Alle ---"
+  },
+  "options_discover_cat_8": {
+    "message": "Landschaften"
+  },
+  "options_discover_cat_1": {
+    "message": "Berühmtheiten"
+  },
+  "options_discover_cat_2": {
+    "message": "Film"
+  },
+  "options_discover_cat_3": {
+    "message": "Journalismus"
+  },
+  "options_discover_cat_4": {
+    "message": "Akt"
+  },
+  "options_discover_cat_5": {
+    "message": "Schwarz & Weiß"
+  },
+  "options_discover_cat_6": {
+    "message": "Stillleben"
+  },
+  "options_discover_cat_7": {
+    "message": "Personen"
+  },
+  "options_discover_cat_9": {
+    "message": "Stadt & Architektur"
+  },
+  "options_discover_cat_10": {
+    "message": "Abstrakt"
+  },
+  "options_discover_cat_11": {
+    "message": "Tiere"
+  },
+  "options_discover_cat_12": {
+    "message": "Makro"
+  },
+  "options_discover_cat_13": {
+    "message": "Reise"
+  },
+  "options_discover_cat_14": {
+    "message": "Mode"
+  },
+  "options_discover_cat_15": {
+    "message": "Kommerziell"
+  },
+  "options_discover_cat_16": {
+    "message": "Konzert"
+  },
+  "options_discover_cat_17": {
+    "message": "Sport"
+  },
+  "options_discover_cat_18": {
+    "message": "Natur"
+  },
+  "options_discover_cat_19": {
+    "message": "Kunst"
+  },
+  "options_discover_cat_20": {
+    "message": "Familie"
+  },
+  "options_discover_cat_21": {
+    "message": "Straßenfotografie"
+  },
+  "options_discover_cat_22": {
+    "message": "Unterwasser"
+  },
+  "options_discover_cat_23": {
+    "message": "Essen"
+  },
+  "options_discover_cat_24": {
+    "message": "Feine Kunst"
+  },
+  "options_discover_cat_25": {
+    "message": "Hochzeit"
+  },
+  "options_discover_cat_26": {
+    "message": "Verkehr"
+  },
+  "options_discover_cat_27": {
+    "message": "Stadterkundung"
+  },
+  "options_discover_cat_28": {
+    "message": ""
+  },
+  "options_discover_cat_29": {
+    "message": "Luftaufnahmen"
+  },
+  "options_discover_cat_30": {
+    "message": "Nacht"
+  },
+  "options_discover_cat_31": {
+    "message": "Boudoir"
   }
 }
