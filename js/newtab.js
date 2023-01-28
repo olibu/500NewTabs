@@ -12,7 +12,11 @@ async function setBackgroundImage() {
   const backgroundField = document.getElementById('background');
   const authorField = document.getElementById('author');
   if (options.img.length > 0) {
-    const pos = Math.floor(Math.random() * options.img.length);
+    let pos = Math.floor(Math.random() * options.img.length);
+    // ensure that the background changes in case of reload
+    while (backgroundField.style.background && backgroundField.style.background.indexOf(options.img[pos].data)!=-1) {
+      pos = Math.floor(Math.random() * options.img.length);
+    }
     backgroundField.style.background = 'url(' + options.img[pos].data + ')';
     authorField.innerHTML = '&copy; ' + options.img[pos].author;
     authorField.href = 'https://500px.com' + options.img[pos].link;
@@ -59,11 +63,18 @@ function padLeft(num) {
   }
 }
 
+async function renew() {
+  await updateCache(true);
+  setBackgroundImage();
+}
+
 async function init() {
   await loadOptions();
   setDateGreeting();
   await setBackgroundImage();
   updateCache();
+  document.getElementById('refresh').onclick = setBackgroundImage;
+  document.getElementById('renew').onclick = renew;
 }
 
 (function () {

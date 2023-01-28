@@ -15,12 +15,9 @@
       #background {
         width: 100%;
         height: 100%;
-        /* background-image: url('../img/bg1.jpg'); */
-        /* background-image: url('https://drscdn.500px.org/photo/1059769670/q%3D80_m%3D1500/v2?sig=3a1561fa782bb4534d737b2829a660d90cd308eabbbf548ab07f9c646f67e657'); */
         background-color: black;
         background-size: cover !important;
         background-position: center;
-        /* transition: all 1s linear; */
         animation: fadeIn 3s;
         display: flex;
         justify-content: center;
@@ -66,12 +63,37 @@
       .author:hover {
         color: white;
       }
+      .invertimg {
+        opacity: 0;
+        -webkit-filter: invert(100%); /* Safari/Chrome */
+        filter: invert(100%);
+      }
+      .invertimg:hover {
+        opacity: 1;
+        -webkit-filter: invert(100%); /* Safari/Chrome */
+        filter: invert(100%);
+        transition: .7s ease;
+        text-shadow: rgb(0, 0, 0, 0.7) 3px 3px 10px;
+      }
+      .table{
+        display: flex;
+      } 
+      .actions {
+        margin-top: 50px;
+        margin-left: 20px;
+        margin-right: 20px;
+        height: 30px;
+      }
     </style>
   </head>
   <body>
     <div id="background">
       <div class="content">
-        <div id="time" class="time"></div>
+        <div class="table">
+          <a class="actions" id="renew" href="#" atr-i18n="title:newtab_renew"><img class="invertimg fadeMe" src="/img/renew.png" width="30" height="30"/></a>
+          <div id="time" class="time"></div>
+          <a class="actions" id="refresh" href="#" atr-i18n="title:newtab_refresh"><img class="invertimg fadeMe" src="/img/refresh.png" width="30" height="30"/></a>
+        </div>
         <div id="greeting" class="greeting"></div>
       </div>
       <a id="author" class="author" target="_blank"></a>
@@ -79,5 +101,6 @@
 
     <script src="js/cache.js" type="module"></script>
     <script src="js/newtab.js" type="module"></script>
+    <script src="js/i18n.js" type="module"></script>
   </body>
 </html>

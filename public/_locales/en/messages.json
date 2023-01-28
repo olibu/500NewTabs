@@ -157,5 +157,11 @@
   },
   "options_discover_cat_31": {
     "message": "Boudoir"
+  },
+  "newtab_renew": {
+    "message": "Update cached images"
+  },
+  "newtab_refresh": {
+    "message": "Show different image"
   }
 }

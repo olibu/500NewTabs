@@ -1,10 +1,23 @@
 (function () {
   window.addEventListener('load', function () {
-    const toTranslate = document.querySelectorAll('[data-i18n]');
     const translate = chrome.i18n.getMessage;
-    for (var i = 0, l = toTranslate.length; i < l; i++) {
-      var element = toTranslate[i];
-      element.innerHTML = translate(element.dataset.i18n);
+    // replace content
+    const toTranslate = document.querySelectorAll('[data-i18n]');
+    if (toTranslate) {
+      for (let i = 0, l = toTranslate.length; i < l; i++) {
+        let element = toTranslate[i];
+        element.innerHTML = translate(element.dataset.i18n);
+      }
+    }
+    // replace attributes
+    const toTranslateAtr = document.querySelectorAll('[atr-i18n]');
+    if (toTranslateAtr) {
+      for (let i = 0, l = toTranslateAtr.length; i < l; i++) {
+        let element = toTranslateAtr[i];
+        console.log(element.attributes['atr-i18n'].value);
+        let set = element.attributes['atr-i18n'].value.split(':');
+        element.setAttribute(set[0], translate(set[1]));
+      }
     }
   });
 }.call(this));
