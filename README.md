@@ -128,6 +128,10 @@ Gallery query:
 }
 ```
 
+## Release Information
+
+Detailed information about the releases can be found [here](https://github.com/olibu/500NewTabs/releases)
+
 ## Disclaimer
 
 This extension is not affiliated with Goolge, 500px.com or any other pice of software mentioned at this site. It may stop working as soon as the backend API from the 500px web page changes.
