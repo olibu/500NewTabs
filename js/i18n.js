@@ -10,12 +10,11 @@
       }
     }
     // replace attributes
-    const toTranslateAtr = document.querySelectorAll('[atr-i18n]');
+    const toTranslateAtr = document.querySelectorAll('[attr-i18n]');
     if (toTranslateAtr) {
       for (let i = 0, l = toTranslateAtr.length; i < l; i++) {
         let element = toTranslateAtr[i];
-        console.log(element.attributes['atr-i18n'].value);
-        let set = element.attributes['atr-i18n'].value.split(':');
+        let set = element.attributes['attr-i18n'].value.split(':');
         element.setAttribute(set[0], translate(set[1]));
       }
     }

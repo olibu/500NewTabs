@@ -18,7 +18,8 @@
         background-color: black;
         background-size: cover !important;
         background-position: center;
-        animation: fadeIn 3s;
+        animation: fadeIn 2s;
+        transition: background-image 2s ease-in-out;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -65,13 +66,11 @@
       }
       .invertimg {
         opacity: 0;
-        -webkit-filter: invert(100%); /* Safari/Chrome */
-        filter: invert(100%);
+        cursor: pointer;
       }
       .invertimg:hover {
         opacity: 1;
-        -webkit-filter: invert(100%); /* Safari/Chrome */
-        filter: invert(100%);
+        cursor: pointer;
         transition: .7s ease;
         text-shadow: rgb(0, 0, 0, 0.7) 3px 3px 10px;
       }
@@ -80,8 +79,8 @@
       } 
       .actions {
         margin-top: 50px;
-        margin-left: 20px;
-        margin-right: 20px;
+        margin-left: 10px;
+        margin-right: 10px;
         height: 30px;
       }
     </style>
@@ -90,9 +89,9 @@
     <div id="background">
       <div class="content">
         <div class="table">
-          <a class="actions" id="renew" href="#" atr-i18n="title:newtab_renew"><img class="invertimg fadeMe" src="/img/renew.png" width="30" height="30"/></a>
+          <img id="renew" class="actions invertimg fadeMe" attr-i18n="title:newtab_renew" src="/img/renew.svg" width="30" height="30"/>
           <div id="time" class="time"></div>
-          <a class="actions" id="refresh" href="#" atr-i18n="title:newtab_refresh"><img class="invertimg fadeMe" src="/img/refresh.png" width="30" height="30"/></a>
+          <img id="refresh" class="actions invertimg fadeMe" attr-i18n="title:newtab_refresh" src="/img/refresh.svg" width="30" height="30"/>
         </div>
         <div id="greeting" class="greeting"></div>
       </div>
