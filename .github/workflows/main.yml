@@ -1,16 +1,13 @@
 name: chrome web store packaging
 
-on: [push]
-# on:
-#   push:
-#     tags:
-#       - '*'
+on:
+  push:
+    tags:
+      - "V**"
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js
@@ -20,6 +17,27 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Update release information in manifest.json
-        run: echo "`jq '.version="'$VERSION'"' dist/manifest.json`" > dist/manifest.json
+        run: echo "`jq '.version="'{{ github.ref }}'"' dist/manifest.json`" > dist/manifest.json
       - name: Create zip
-        run: zip -r 500NewTabs_$VERSION.zip ./dist
+        run: zip -r 500NewTabs.zip ./dist
+
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ github.ref }}
+          tag_name: ${{ github.ref }}
+          # body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload artifact as release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./500NewTabs.zip
+          asset_name: 500NewTabs_${{ github.ref }}.zip
+          asset_content_type: application/gzip
