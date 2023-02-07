@@ -20,9 +20,9 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Update release information in manifest.json
-        run: echo "`jq '.version="{{ github.ref }}"' dist/manifest.json`" > dist/manifest.json
+        run: echo "`jq '.version="pre"' dist/manifest.json`" > dist/manifest.json
       - name: Create zip
-        run: zip -r 500NewTabs.zip ./dist
+        run: cd dist && zip -r ../500NewTabs_pre.zip ./
 
       - name: prerelease
         uses: softprops/action-gh-release@v1
@@ -32,4 +32,4 @@ jobs:
           title: "Development Build"
           tag_name: "pre"
           files: |
-            500NewTabs.zip
+            500NewTabs_pre.zip
