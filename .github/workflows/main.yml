@@ -12,10 +12,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Set version variable
-        run: |
-          export TAGVERSION=${GITHUB_REF_NAME:1}
-          echo "Version identifier of tag is '$TAGVERSION'"
       - uses: actions/checkout@v3
       - name: Use Node.js
         uses: actions/setup-node@v3
@@ -25,9 +21,9 @@ jobs:
       - run: npm run build
       - name: Update release information in manifest.json
         run: |
+          TAGVERSION=${GITHUB_REF_NAME:1}
           echo "Version identifier of tag is '$TAGVERSION'"
           echo "`jq '.version="'$TAGVERSION'"' dist/manifest.json`" > dist/manifest.json
-          echo "`jq '.version="$TAGVERSION"' dist/manifest.json`" > dist/manifest2.json
       - name: Create zip
         run: cd dist && zip -r ../500NewTabs_$GITHUB_REF_NAME.zip ./
 
