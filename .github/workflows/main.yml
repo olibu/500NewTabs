@@ -5,14 +5,17 @@ on:
     tags:
       - "V**"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: GitHub Tag Name example
+      - name: Set version variable
         run: |
-          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+          TAGVERSION=${GITHUB_REF_NAME:1}
+          echo "Version identifier of tag is '$TAGVERSION'"
       - uses: actions/checkout@v3
       - name: Use Node.js
         uses: actions/setup-node@v3
@@ -21,13 +24,13 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Update release information in manifest.json
-        run: echo "`jq '.version="'{{ github.ref_name }}'"' dist/manifest.json`" > dist/manifest.json
+        run: echo "`jq '.version="'$TAGVERSION'"' dist/manifest.json`" > dist/manifest.json
       - name: Create zip
-        run: cd dist && zip -r ../500NewTabs_{{github.ref_name}}.zip ./
+        run: cd dist && zip -r ../500NewTabs_$GITHUB_REF_NAME.zip ./
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
           files: |
-            500NewTabs_{{github.ref_name}}.zip
+            500NewTabs_$GITHUB_REF_NAME.zip
