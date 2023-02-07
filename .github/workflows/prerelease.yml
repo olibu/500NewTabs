@@ -1,0 +1,32 @@
+name: "pre-release"
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - run: npm ci
+      - run: npm run build
+      - name: Update release information in manifest.json
+        run: echo "`jq '.version="'{{ github.ref }}'"' dist/manifest.json`" > dist/manifest.json
+      - name: Create zip
+        run: zip -r 500NewTabs.zip ./dist
+
+      - name: prerelease
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            500NewTabs.zip
