@@ -1,4 +1,4 @@
-name: chrome web store packaging
+name: "chrome web store packaging"
 
 on:
   push:
@@ -9,10 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-     - name: GitHub Tag Name example
-       run: |
-         echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-         echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+      - name: GitHub Tag Name example
+        run: |
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
       - uses: actions/checkout@v3
       - name: Use Node.js
         uses: actions/setup-node@v3
