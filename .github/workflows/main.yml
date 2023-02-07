@@ -1,9 +1,9 @@
-name: "chrome web store packaging"
+name: "Release build for chrome web store"
 
 on:
   push:
     tags:
-      - "V**"
+      - "V*.*.*"
 
 permissions:
   contents: write
@@ -30,6 +30,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
+          body_path: RELEASE.md
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |
