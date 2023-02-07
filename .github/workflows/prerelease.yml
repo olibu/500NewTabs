@@ -5,6 +5,9 @@ on:
     branches:
       - "main"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,14 +20,13 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Update release information in manifest.json
-        run: echo "`jq '.version="'{{ github.ref }}'"' dist/manifest.json`" > dist/manifest.json
+        run: echo "`jq '.version="{{ github.ref }}"' dist/manifest.json`" > dist/manifest.json
       - name: Create zip
         run: zip -r 500NewTabs.zip ./dist
 
       - name: prerelease
-        uses: marvinpinto/action-automatic-releases@latest
+        uses: softprops/action-gh-release@v1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: true
           title: "Development Build"
