@@ -1,9 +1,10 @@
 name: chrome web store packaging
 
-on:
-  push:
-    tags:
-      - '*'
+on: [push]
+# on:
+#   push:
+#     tags:
+#       - '*'
 
 jobs:
   build:
@@ -18,3 +19,7 @@ jobs:
           node-version: '18.x'
       - run: npm ci
       - run: npm run build
+      - name: Update release information in manifest.json
+        run: echo "`jq '.version="'$VERSION'"' dist/manifest.json`" > dist/manifest.json
+      - name: Create zip
+        run: zip -r 500NewTabs_$VERSION.zip ./dist
