@@ -17,6 +17,9 @@
   "options_safemode": {
     "message": "Keine anstößige Bilder anzeigen"
   },
+  "options_random": {
+    "message": "Zufälliges Bild anzeigen"
+  },
   "options_greetings": {
     "message": "Begrüßung anzeigen"
   },

@@ -8,6 +8,7 @@ function save_options() {
   var discoverCat = document.getElementById('discover_cat').value;
   var name = document.getElementById('name').value;
   var interval = parseInt(document.getElementById('interval').value);
+  var random = document.getElementById('random').checked;
   chrome.storage.local.set(
     {
       greetings: greetings,
@@ -16,6 +17,7 @@ function save_options() {
       discoverCat: discoverCat,
       name: name,
       interval: interval,
+      random: random,
     },
     function () {
       // Update status to let user know options were saved.
@@ -45,6 +47,7 @@ function restore_options() {
       discoverCat: 1,
       name: chrome.i18n.getMessage('greeting_name'),
       interval: 60,
+      random: false,
     },
     function (items) {
       document.getElementById('greetings').checked = items.greetings;
@@ -53,6 +56,7 @@ function restore_options() {
       document.getElementById('discover_cat').value = items.discoverCat;
       document.getElementById('name').value = items.name;
       document.getElementById('interval').value = items.interval;
+      document.getElementById('random').checked = items.random;
     }
   );
   addCategory();

@@ -12,14 +12,22 @@ async function setBackgroundImage() {
   const backgroundField = document.getElementById('background');
   const authorField = document.getElementById('author');
   if (options.img.length > 0) {
-    let pos = Math.floor(Math.random() * options.img.length);
-    // ensure that the background changes in case of reload
-    while (backgroundField.style.background && backgroundField.style.background.indexOf(options.img[pos].data)!=-1) {
-      pos = Math.floor(Math.random() * options.img.length);
+    options.lastPos++;
+    if (options.lastPos >= options.img.length) {
+      options.lastPos = 0;
     }
-    backgroundField.style.background = 'url(' + options.img[pos].data + ')';
-    authorField.innerHTML = '&copy; ' + options.img[pos].author;
-    authorField.href = 'https://500px.com' + options.img[pos].link;
+
+    if (options.random) {
+      let pos = Math.floor(Math.random() * options.img.length);
+      // ensure that the background changes in case of reload
+      while (backgroundField.style.background && backgroundField.style.background.indexOf(options.img[pos].data)!=-1) {
+        pos = Math.floor(Math.random() * options.img.length);
+      }
+      options.lastPos = pos;
+    }
+    backgroundField.style.background = 'url(' + options.img[options.lastPos].data + ')';
+    authorField.innerHTML = '&copy; ' + options.img[options.lastPos].author;
+    authorField.href = 'https://500px.com' + options.img[options.lastPos].link;
   } else {
     console.log('using fallback image');
     const imgUrl = new URL('../img/bg.jpeg', import.meta.url).href

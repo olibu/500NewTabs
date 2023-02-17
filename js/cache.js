@@ -15,6 +15,8 @@ async function loadOptions() {
     img: [],
     lastUpdate: -1,
     interval: 60,
+    random: false,
+    lastPos: -1
   });
 }
 
@@ -49,6 +51,9 @@ async function updateCache(forceUpdate = false) {
       img: options.img,
       lastUpdate: new Date().getTime(),
     });
+
+    // reset current position
+    options.lastPos = -1;
   } catch (e) {
     console.log('Not possible to update cache', e);
   }

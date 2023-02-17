@@ -17,6 +17,9 @@
   "options_safemode": {
     "message": "Safemode"
   },
+  "options_random": {
+    "message": "Show random image"
+  },
   "options_greetings": {
     "message": "Show greetings"
   },
