@@ -24,6 +24,7 @@ function save_options() {
       showStatus(chrome.i18n.getMessage('options_saved'));
     }
   );
+  updateCache(true, true);
 }
 
 // show text in status span for 2 seconds
@@ -83,7 +84,7 @@ function addCategory() {
 // update the image cache
 async function update_cache() {
   try {
-    await updateCache(true);
+    await updateCache(true, true);
     showStatus(chrome.i18n.getMessage('options_update_ok'));
   } catch (e) {
     showStatus(chrome.i18n.getMessage('options_update_error'));

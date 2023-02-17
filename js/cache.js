@@ -13,6 +13,9 @@ async function loadOptions() {
     discoverCat: "8",
     name: chrome.i18n.getMessage('greeting_name'),
     img: [],
+    imgUrl: [],
+    imgUrlPos: 0,
+    lastUrlUpdate: -1,
     lastUpdate: -1,
     interval: 60,
     random: false,
@@ -20,26 +23,70 @@ async function loadOptions() {
   });
 }
 
-async function updateCache(forceUpdate = false) {
+/**
+ * Update the cache.
+ * 
+ * Every options.interval the next 10 images are loaded into the cache.
+ * Once a day the image URLs are loaded form 500px.
+ * 
+ * @param {*} forceUpdate Update image cache independent of interval time (default: false)
+ * @param {*} forceUrlUpdate Update image URL cache independent of interval time (default: false)
+ * @returns 
+ */
+async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
   await loadOptions();
 
   // check for last update
-  if (!forceUpdate && options.lastUpdate !== -1 && options.lastUpdate + 1000 * 60 * options.interval > new Date().getTime()) {
+  if (!forceUpdate && !options.lastUpdate !== -1 && options.lastUpdate + 1000 * 60 * options.interval > new Date().getTime()) {
+    // nothing to do. Waiting for next cache update interval
     return;
   }
 
-  console.log('updating cache');
+  if (forceUrlUpdate || options.lastUrlUpdate === -1 || options.lastUrlUpdate + 1000 * 60 * 60 * 24 < new Date().getTime()) {
+    // update the URL list
+    console.log('updating URL cache');
+    try {
+      const images = await getImages();
+      options.imgUrl = images;
+      options.imgUrlPos = 0;
+      options.lastUrlUpdate = new Date().getTime();
+      
+      chrome.storage.local.set({
+        imgUrl: options.imgUrl,
+        imgUrlPos: options.imgUrlPos,
+        lastUrlUpdate: options.lastUrlUpdate,
+      });
+    } catch (e) {
+      console.log('Not possible to update URL cache', e);
+    }
+  }
+
+  console.log('updating image cache');
 
   try {
     // update the image
-    const images = await getImages();
-    // console.log('Images from 500px: ', images);
-    for (let image of images) {
-      if (!includesAttribValue(options.img, 'url', image.url)) {
-        // console.log('adding image', image);
-        await addImage(image);
+    let overflow = 0;
+    for (let pos=0; pos < MAX_IMAGES; pos++) {
+      let imagePos = options.imgUrlPos + pos;
+      if (imagePos>=options.imgUrl.length) {
+        // start at the on top of the image url list
+        imagePos -= options.imgUrl.length;
+        overflow++;
+      }
+      if (!includesAttribValue(options.img, 'url', options.imgUrl[imagePos].url)) {
+        // console.log('adding image', options.imgUrl[imagePos].url);
+        await addImage(options.imgUrl[imagePos]);
+      }
+      else {
+        // console.log('image already in cache ', options.imgUrl[imagePos].url);
       }
     }
+
+    options.imgUrlPos += MAX_IMAGES;
+    if (overflow>0) {
+      options.imgUrlPos = overflow;
+    }
+
     // reduces size of cache
     while (options.img.length > MAX_IMAGES) {
       // console.log('remove first element from cache');
@@ -49,10 +96,11 @@ async function updateCache(forceUpdate = false) {
     // store new images in local store
     chrome.storage.local.set({
       img: options.img,
+      imgUrlPos: options.imgUrlPos,
       lastUpdate: new Date().getTime(),
     });
 
-    // reset current position
+    // reset current position to start iteration at firt image
     options.lastPos = -1;
   } catch (e) {
     console.log('Not possible to update cache', e);
@@ -63,7 +111,7 @@ async function updateCache(forceUpdate = false) {
 async function getImages() {
   const images = [];
   let query =
-    '{ "operationName":"GalleriesDetailQueryRendererQuery","variables":{ "ownerLegacyId":"1006727773","slug":"500NewTabs","token":null,"pageSize":20,"showNude":true }, "query":"query GalleriesDetailQueryRendererQuery( $ownerLegacyId: String, $slug: String, $token: String, $pageSize: Int, $showNude: Boolean ) { gallery: galleryByOwnerIdAndSlugOrToken(ownerLegacyId: $ownerLegacyId, slug: $slug, token: $token) { ...GalleriesDetailPaginationContainer_gallery_15zZXN id } } fragment GalleriesDetailPaginationContainer_gallery_15zZXN on Gallery { id legacyId photos(first: $pageSize, showNude: $showNude) { totalCount edges { cursor node { id legacyId canonicalPath notSafeForWork photographer: uploader { id legacyId username displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }';
+    '{ "operationName":"GalleriesDetailQueryRendererQuery","variables":{ "ownerLegacyId":"1006727773","slug":"500NewTabs","token":null,"pageSize":100,"showNude":true }, "query":"query GalleriesDetailQueryRendererQuery( $ownerLegacyId: String, $slug: String, $token: String, $pageSize: Int, $showNude: Boolean ) { gallery: galleryByOwnerIdAndSlugOrToken(ownerLegacyId: $ownerLegacyId, slug: $slug, token: $token) { ...GalleriesDetailPaginationContainer_gallery_15zZXN id } } fragment GalleriesDetailPaginationContainer_gallery_15zZXN on Gallery { id legacyId photos(first: $pageSize, showNude: $showNude) { totalCount edges { cursor node { id legacyId canonicalPath notSafeForWork photographer: uploader { id legacyId username displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }';
   if (options.discover != 'gallery') {
     let feature ='';
     if (options.discover !== '') {
@@ -74,7 +122,7 @@ async function getImages() {
       category = `{ "key":"CATEGORY", "value":"${options.discoverCat}" }, `
     }
     query =
-      `{ "operationName": "DiscoverQueryRendererQuery", "variables": { "filters": [ ${feature} ${category} { "key":"FOLLOWERS_COUNT", "value":"gte:1" } ], "sort":"POPULAR_PULSE" }, "query":"query DiscoverQueryRendererQuery($filters: [PhotoDiscoverSearchFilter!], $sort: PhotoDiscoverSort) {...DiscoverPaginationContainer_query_1OEZSy } fragment DiscoverPaginationContainer_query_1OEZSy on Query { photos: photoDiscoverSearch(first: 20, filters: $filters, sort: $sort) { edges { node { canonicalPath notSafeForWork photographer: uploader { displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }`;
+      `{ "operationName": "DiscoverQueryRendererQuery", "variables": { "filters": [ ${feature} ${category} { "key":"FOLLOWERS_COUNT", "value":"gte:1" } ], "sort":"POPULAR_PULSE" }, "query":"query DiscoverQueryRendererQuery($filters: [PhotoDiscoverSearchFilter!], $sort: PhotoDiscoverSort) {...DiscoverPaginationContainer_query_1OEZSy } fragment DiscoverPaginationContainer_query_1OEZSy on Query { photos: photoDiscoverSearch(first: 100, filters: $filters, sort: $sort) { edges { node { canonicalPath notSafeForWork photographer: uploader { displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }`;
   }
   const res = await fetch('https://api.500px.com/graphql', {
     headers: {
@@ -93,11 +141,7 @@ async function getImages() {
   } else {
     nodes = result.data.photos.edges;
   }
-  let count = 0;
   for (let node of nodes) {
-    if (count++ >= MAX_IMAGES) {
-      break;
-    }
     // ignore images which are "not safe"
     if (options.safemode) {
       if (node.node.notSafeForWork) {

@@ -28,6 +28,9 @@ async function setBackgroundImage() {
     backgroundField.style.background = 'url(' + options.img[options.lastPos].data + ')';
     authorField.innerHTML = '&copy; ' + options.img[options.lastPos].author;
     authorField.href = 'https://500px.com' + options.img[options.lastPos].link;
+    chrome.storage.local.set({
+      lastPos: options.lastPos,
+    });
   } else {
     console.log('using fallback image');
     const imgUrl = new URL('../img/bg.jpeg', import.meta.url).href
