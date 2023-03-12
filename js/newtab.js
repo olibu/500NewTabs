@@ -12,9 +12,15 @@ async function setBackgroundImage() {
   const backgroundField = document.getElementById('background');
   const authorField = document.getElementById('author');
   if (options.img.length > 0) {
+    // console.log('lastPos', options.lastPos);
     options.lastPos++;
     if (options.lastPos >= options.img.length) {
       options.lastPos = 0;
+    }
+
+    // set the max pos to show each image once at least
+    if (options.lastPos >= options.maxPos) {
+      options.maxPos = options.lastPos + 1;
     }
 
     if (options.random) {
@@ -30,6 +36,7 @@ async function setBackgroundImage() {
     authorField.href = 'https://500px.com' + options.img[options.lastPos].link;
     chrome.storage.local.set({
       lastPos: options.lastPos,
+      maxPos: options.maxPos,
     });
   } else {
     console.log('using fallback image');

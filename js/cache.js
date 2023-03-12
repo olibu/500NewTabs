@@ -19,7 +19,8 @@ async function loadOptions() {
     lastUpdate: -1,
     interval: 60,
     random: false,
-    lastPos: -1
+    lastPos: -1,
+    maxPos: 0
   });
 }
 
@@ -42,19 +43,21 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
     return;
   }
 
+  // update the image list once a day
   if (forceUrlUpdate || options.lastUrlUpdate === -1 || options.lastUrlUpdate + 1000 * 60 * 60 * 24 < new Date().getTime()) {
-    // update the URL list
     console.log('updating URL cache');
     try {
       const images = await getImages();
       options.imgUrl = images;
       options.imgUrlPos = 0;
       options.lastUrlUpdate = new Date().getTime();
+      options.maxPos = MAX_IMAGES;
       
       chrome.storage.local.set({
-        imgUrl: options.imgUrl,
-        imgUrlPos: options.imgUrlPos,
+        imgUrl: images,
+        imgUrlPos: 0,
         lastUrlUpdate: options.lastUrlUpdate,
+        maxPos: MAX_IMAGES,
       });
     } catch (e) {
       console.log('Not possible to update URL cache', e);
@@ -64,9 +67,10 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
   console.log('updating image cache');
 
   try {
-    // update the image
+    // update the image cache
+    // console.log('maxPos', options.maxPos);
     let overflow = 0;
-    for (let pos=0; pos < MAX_IMAGES; pos++) {
+    for (let pos=0; pos <= options.maxPos; pos++) {
       let imagePos = options.imgUrlPos + pos;
       if (imagePos>=options.imgUrl.length) {
         // start at the on top of the image url list
@@ -82,7 +86,7 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       }
     }
 
-    options.imgUrlPos += MAX_IMAGES;
+    options.imgUrlPos += options.maxPos;
     if (overflow>0) {
       options.imgUrlPos = overflow;
     }
@@ -98,10 +102,14 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       img: options.img,
       imgUrlPos: options.imgUrlPos,
       lastUpdate: new Date().getTime(),
+      maxPos: 0,
+      lastPos: -1,
     });
 
     // reset current position to start iteration at firt image
     options.lastPos = -1;
+    options.maxPos = 0;
+
   } catch (e) {
     console.log('Not possible to update cache', e);
   }

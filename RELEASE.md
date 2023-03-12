@@ -1,7 +1,5 @@
 ### New Features:
-- New Option for sequential or sequential image order
-- Iteration through more images
-- Complete image list is updated only once a day
+- Show each picture at least one time
 
 ### Bugfixes:
 - none
