@@ -47,6 +47,8 @@ async function setBackgroundImage() {
     backgroundField.style.background = 'url(' + options.img[options.lastPos].data + ')';
     authorField.innerHTML = '&copy; ' + options.img[options.lastPos].author;
     authorField.href = 'https://500px.com' + options.img[options.lastPos].link;
+
+    // store the current properties in the local store for the next new tab
     chrome.storage.local.set({
       lastPos: options.lastPos,
       maxPos: options.maxPos,
@@ -75,6 +77,7 @@ async function setDateGreeting() {
     greetingField.textContent = '';
   }
 
+  // start a timer to update the time and message in case the new tab page is shown for a longer time
   setTimeout(setDateGreeting, 10000);
 }
 
@@ -96,16 +99,28 @@ function padLeft(num) {
   }
 }
 
+// update the cache with the next set of images (but not the whole image cache)
+// and show the first image
 async function renew() {
   await updateCache(true);
   setBackgroundImage();
 }
 
+// executed on every new page view
 async function init() {
+  // load the options object
   await loadOptions();
+
+  // show the greetings message and start the timer for regular update
   setDateGreeting();
+
+  // show the current background image
   await setBackgroundImage();
+
+  // trigger the update of the cache (update not enforced)
   updateCache();
+
+  // add the click handler for the two buttons
   document.getElementById('refresh').onclick = setBackgroundImage;
   document.getElementById('renew').onclick = renew;
 }
