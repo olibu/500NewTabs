@@ -1,7 +1,6 @@
 import { loadOptions, options, updateCache } from '@/cache.js';
 
 async function setBackgroundImage() {
-  // set the image to the cached one
   if (options.img.length == 0) {
     // special behavior for first time
     await updateCache();
@@ -11,26 +10,40 @@ async function setBackgroundImage() {
 
   const backgroundField = document.getElementById('background');
   const authorField = document.getElementById('author');
+
   if (options.img.length > 0) {
+    // in case of images in the cache, show one of them
+
     // console.log('lastPos', options.lastPos);
+
+    // select the next image in the cache
+    // the last shown position in the cache is stored in the options of the extension
     options.lastPos++;
     if (options.lastPos >= options.img.length) {
+      // end of the cache has been reached start with the first image
       options.lastPos = 0;
     }
 
     // set the max pos to show each image once at least
+    // this ensures that refreshing of the cache does not drop the unshown images
+    // maxPos is set to the next image, as lastPos is alread shown now
     if (options.lastPos >= options.maxPos) {
       options.maxPos = options.lastPos + 1;
     }
 
     if (options.random) {
+      // in case of random option instead of a sequential selection of the image cache, the shown image is overwritten
+
       let pos = Math.floor(Math.random() * options.img.length);
       // ensure that the background changes in case of reload
       while (backgroundField.style.background && backgroundField.style.background.indexOf(options.img[pos].data)!=-1) {
         pos = Math.floor(Math.random() * options.img.length);
       }
       options.lastPos = pos;
+      options.maxPos = -1; // in this case it cannot be guaranteed that all images are shown
     }
+
+    // show the background image
     backgroundField.style.background = 'url(' + options.img[options.lastPos].data + ')';
     authorField.innerHTML = '&copy; ' + options.img[options.lastPos].author;
     authorField.href = 'https://500px.com' + options.img[options.lastPos].link;
@@ -39,7 +52,9 @@ async function setBackgroundImage() {
       maxPos: options.maxPos,
     });
   } else {
-    console.log('using fallback image');
+    // in case of missing cached images, show the one distributed with the extension
+
+    // console.log('using fallback image');
     const imgUrl = new URL('../img/bg.jpeg', import.meta.url).href
     backgroundField.style.background = 'url(' + imgUrl + ')';
     authorField.innerHTML = '&copy; olibu';
