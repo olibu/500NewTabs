@@ -50,8 +50,6 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
   // ensure that options are available
   await loadOptions();
 
-  forceUrlUpdate = true;
-
   // check for last update
   if (!forceUrlUpdate && !forceUpdate && !options.lastUpdate !== -1 && options.lastUpdate + 1000 * 60 * options.interval > new Date().getTime()) {
     // nothing to do. Waiting for next cache update interval
