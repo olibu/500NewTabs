@@ -4,8 +4,12 @@ let options;
 function setOptions(opt) {
   options = opt;
 }
+function getOptions() {
+  return options;
+}
 function saveOptions(opt) {
-  if (!options.mock) {
+  // save options if executed in browser (not in unit tests)
+  if (typeof chrome != 'undefined') {
     chrome.storage.local.set(opt);
   }
 }
@@ -15,12 +19,12 @@ async function loadOptions() {
     return;
   }
 
-  const opt = await chrome.storage.local.get({
+  const defaultOptions = {
     greetings: true,
     safemode: true,
     discover: 'gallery',
     discoverCat: "8",
-    name: chrome.i18n.getMessage('greeting_name'),
+    name: 'Hello',
     img: [],
     imgUrl: [],
     imgUrlPos: 0,
@@ -31,8 +35,15 @@ async function loadOptions() {
     lastPos: -1,
     maxPos: 0,
     cursor: false,
-  });
+  }
 
+  let opt = defaultOptions;
+
+  if (typeof chrome != 'undefined') {
+    opt.name = chrome.i18n.getMessage('greeting_name');
+    opt = await chrome.storage.local.get(defaultOptions);
+  }
+  
   setOptions(opt);
 }
 
@@ -67,12 +78,14 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       options.lastUrlUpdate = new Date().getTime();
       options.maxPos = -1;
       
-      chrome.storage.local.set({
-        imgUrl: images,
-        imgUrlPos: 0,
-        lastUrlUpdate: options.lastUrlUpdate,
-        maxPos: -1,
-      });
+      if (typeof chrome != 'undefined') {
+        chrome.storage.local.set({
+          imgUrl: images,
+          imgUrlPos: 0,
+          lastUrlUpdate: options.lastUrlUpdate,
+          maxPos: -1,
+        });
+      }
     } catch (e) {
       console.log('Not possible to update image URL list', e);
     }
@@ -135,13 +148,15 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
     }
 
     // store new images in local store
-    chrome.storage.local.set({
-      img: options.img,
-      imgUrlPos: options.imgUrlPos,
-      lastUpdate: new Date().getTime(),
-      maxPos: 0,
-      lastPos: -1,
-    });
+    if (!options.mock) {
+      chrome.storage.local.set({
+        img: options.img,
+        imgUrlPos: options.imgUrlPos,
+        lastUpdate: new Date().getTime(),
+        maxPos: 0,
+        lastPos: -1,
+      });
+    }
 
     // reset current position to start iteration at firt image
     options.lastPos = -1;
@@ -158,7 +173,6 @@ async function getImages(useCursor) {
   
   // set the cursor of the last query if available and if required
   let cursor = ''
-  console.log(options);
 
   // define the query for the gallery
   let query =
@@ -232,7 +246,7 @@ async function getImages(useCursor) {
 
   // get the cursor and save it for the next query
   if (piCursor) {
-    console.log(piCursor);
+    // console.log(piCursor);
     if (hasNextPage) {
       options.cursor = piCursor
     }
@@ -307,5 +321,6 @@ export {
   updateCache,
   getImages,
   setOptions,
-  saveOptions
+  saveOptions,
+  getOptions,
 }
