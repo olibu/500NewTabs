@@ -78,21 +78,13 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       options.lastUrlUpdate = new Date().getTime();
       options.maxPos = -1;
       
-      if (typeof chrome != 'undefined') {
-        chrome.storage.local.set({
-          imgUrl: images,
-          imgUrlPos: 0,
-          lastUrlUpdate: options.lastUrlUpdate,
-          maxPos: -1,
-        });
-      }
+      saveOptions(options);
     } catch (e) {
       console.log('Not possible to update image URL list', e);
     }
   }
 
-  console.log('updating image cache');
-
+  
   // update the image cache
   try {
     // add the amount of already seen images to the cache
@@ -102,7 +94,7 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
     if (options.maxPos === -1) {
       options.maxPos = MAX_IMAGES;
     }
-
+    
     for (let pos=0; pos <= options.maxPos; pos++) {
       // get the image URL in the image list
       // the imgUrlPos is the position of the images already loaded in the last update cycle
@@ -241,7 +233,8 @@ async function getImages(useCursor) {
   }
 
   if (!nodes) {
-    throw new Error('Could not load iamges.');
+    console.log(query, result);
+    throw new Error('Could not load images.')
   }
 
   // get the cursor and save it for the next query
@@ -323,4 +316,5 @@ export {
   setOptions,
   saveOptions,
   getOptions,
+  options,
 }
