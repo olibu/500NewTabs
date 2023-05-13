@@ -1,5 +1,5 @@
 // Load the image from the image.url and add it to the cache
-export function addImage(image) {
+export function getImage(image) {
   return new Promise((resolve) => {
     var xhr = new XMLHttpRequest(),
       blob,
@@ -13,8 +13,7 @@ export function addImage(image) {
           blob = new Blob([xhr.response], { type: 'image/png' });
           fileReader.onload = function (evt) {
             var result = evt.target.result;
-            options.img.push({data: result, url: image.url, author: image.author, link: image.link});
-            resolve();
+            resolve({data: result, url: image.url, author: image.author, link: image.link});
           };
           fileReader.readAsDataURL(blob);
         }

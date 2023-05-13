@@ -1,4 +1,4 @@
-import { addImage } from './utils.js';
+import { getImage } from './utils.js';
 
 const MAX_IMAGES = 10;
 
@@ -119,7 +119,8 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       // check if the image is already in the cache
       if (!includesAttribValue(options.img, 'url', options.imgUrl[imagePos].url)) {
         // console.log('adding image', options.imgUrl[imagePos].url);
-        await addImage(options.imgUrl[imagePos]);
+        const image = await getImage(options.imgUrl[imagePos]);
+        options.img.push(image);
       }
       else {
         // console.log('image already in cache ', options.imgUrl[imagePos].url);
