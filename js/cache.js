@@ -1,3 +1,5 @@
+import { addImage } from './utils.js';
+
 const MAX_IMAGES = 10;
 
 let options;
@@ -140,15 +142,14 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
     }
 
     // store new images in local store
-    if (!options.mock) {
-      chrome.storage.local.set({
-        img: options.img,
-        imgUrlPos: options.imgUrlPos,
-        lastUpdate: new Date().getTime(),
-        maxPos: 0,
-        lastPos: -1,
-      });
-    }
+    saveOptions({
+      img: options.img,
+      imgUrlPos: options.imgUrlPos,
+      lastUpdate: new Date().getTime(),
+      maxPos: 0,
+      lastPos: -1,
+    });
+    
 
     // reset current position to start iteration at firt image
     options.lastPos = -1;
@@ -273,33 +274,6 @@ async function getImages(useCursor) {
   return images;
 }
 
-// Load the image from the image.url and add it to the cache
-function addImage(image) {
-  return new Promise((resolve) => {
-    var xhr = new XMLHttpRequest(),
-      blob,
-      fileReader = new FileReader();
-    xhr.open('GET', image.url, true);
-    xhr.responseType = 'arraybuffer';
-    xhr.addEventListener(
-      'load',
-      function () {
-        if (xhr.status === 200) {
-          blob = new Blob([xhr.response], { type: 'image/png' });
-          fileReader.onload = function (evt) {
-            var result = evt.target.result;
-            options.img.push({data: result, url: image.url, author: image.author, link: image.link});
-            resolve();
-          };
-          fileReader.readAsDataURL(blob);
-        }
-      },
-      false
-    );
-    xhr.send();
-  });
-}
-
 function includesAttribValue(array, attr, value) {
   for (let a of array) {
     if (a[attr] === value) {
@@ -317,4 +291,5 @@ export {
   saveOptions,
   getOptions,
   options,
+  // addImage,
 }
