@@ -46,6 +46,8 @@ function showStatus(text) {
 async function restore_options() {
   await loadOptions();
 
+  addCategory();
+
   document.getElementById('greetings').checked = options.greetings;
   document.getElementById('safemode').checked = options.safemode;
   document.getElementById('discover').value = options.discover;
@@ -54,7 +56,6 @@ async function restore_options() {
   document.getElementById('interval').value = options.interval;
   document.getElementById('random').checked = options.random;
 
-  addCategory();
 }
 
 function addCategory() {
