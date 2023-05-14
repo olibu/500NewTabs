@@ -1,4 +1,4 @@
-import { expect, describe, it, vi } from 'vitest';
+import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';
 import { getImages, loadOptions, saveOptions, updateCache, getOptions } from '../cache.js';
 
 loadOptions();
@@ -32,6 +32,16 @@ describe('getImages Testcases', async () => {
 }),
 
 describe('updateCache Testcases', async () => {
+  beforeEach(() => {
+    // tell vitest we use mocked time
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    // restoring date after each test run
+    vi.useRealTimers()
+  })
+
   vi.mock('../utils.js', () => {
     return {
       getImage: vi.fn((image) => {
@@ -44,9 +54,10 @@ describe('updateCache Testcases', async () => {
       }),
     }
   });
+  
+  loadOptions();
 
   it('should updateCache on first call', async () => {
-    loadOptions();
     const options = getOptions();
 
     // get the first bunch of images starting from the top
@@ -93,18 +104,24 @@ describe('updateCache Testcases', async () => {
     expect(options.img[0].url).toBe(options.imgUrl[1].url);
   });
 
-  it('should updateCache with new URLs if all images have been shown and it is forced', async () => {
+  it('should updateCache with new images if interval has expired', async () => {
     const options = getOptions();
-
+    
+    const dateLast = new Date('2000-01-01T00:00:00.000Z');
+    const date = new Date();
+    date.setTime(dateLast.getTime() + (options.interval*60*1000));
+    vi.setSystemTime(date)
+    
+    options.lastUpdate = dateLast.getTime();
+    options.imgUrlPos = 10;
     options.lastPos = 1;
     options.maxPos = 1;
-    options.imgUrlPos = options.imgUrl.length;
 
     // get the first bunch of images starting from the top
-    await updateCache(true);
+    await updateCache();
 
     // console.log(options);
-    expect(options.imgUrlPos).toBe(21);
+    expect(options.imgUrlPos).toBe(11);
   });
 
 })
