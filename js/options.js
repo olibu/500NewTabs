@@ -1,4 +1,4 @@
-import { loadOptions, options, updateCache } from '@/cache.js';
+import { loadOptions, options, updateCache, saveOptions } from '@/cache.js';
 
 // Saves options to chrome.storage
 function save_options() {
@@ -9,21 +9,25 @@ function save_options() {
   var name = document.getElementById('name').value;
   var interval = parseInt(document.getElementById('interval').value);
   var random = document.getElementById('random').checked;
-  chrome.storage.local.set(
-    {
-      greetings: greetings,
-      safemode: safemode,
-      discover: discover,
-      discoverCat: discoverCat,
-      name: name,
-      interval: interval,
-      random: random,
-    },
-    function () {
-      // Update status to let user know options were saved.
-      showStatus(chrome.i18n.getMessage('options_saved'));
-    }
-  );
+  saveOptions({
+    greetings: greetings,
+    safemode: safemode,
+    discover: discover,
+    discoverCat: discoverCat,
+    name: name,
+    interval: interval,
+    random: random,
+    img: [],          
+    imgUrl: [],       
+    imgUrlPos: 0,     
+    lastUrlUpdate: -1,
+    lastUpdate: -1,   
+    lastPos: -1,      
+    maxPos: 0,        
+    cursor: false,    
+  });
+  // Update status to let user know options were saved.
+  showStatus(chrome.i18n.getMessage('options_saved'));
   updateCache(true, true);
 }
 
@@ -38,28 +42,17 @@ function showStatus(text) {
 
 // Restores options using the preferences
 // stored in chrome.storage.
-function restore_options() {
-  // Use default value color = 'red' and likesColor = true.
-  chrome.storage.local.get(
-    {
-      greetings: true,
-      safemode: true,
-      discover: 1,
-      discoverCat: 1,
-      name: chrome.i18n.getMessage('greeting_name'),
-      interval: 60,
-      random: false,
-    },
-    function (items) {
-      document.getElementById('greetings').checked = items.greetings;
-      document.getElementById('safemode').checked = items.safemode;
-      document.getElementById('discover').value = items.discover;
-      document.getElementById('discover_cat').value = items.discoverCat;
-      document.getElementById('name').value = items.name;
-      document.getElementById('interval').value = items.interval;
-      document.getElementById('random').checked = items.random;
-    }
-  );
+async function restore_options() {
+  await loadOptions();
+
+  document.getElementById('greetings').checked = options.greetings;
+  document.getElementById('safemode').checked = options.safemode;
+  document.getElementById('discover').value = options.discover;
+  document.getElementById('discover_cat').value = options.discoverCat;
+  document.getElementById('name').value = options.name;
+  document.getElementById('interval').value = options.interval;
+  document.getElementById('random').checked = options.random;
+
   addCategory();
 }
 
