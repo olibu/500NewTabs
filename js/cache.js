@@ -10,6 +10,10 @@ function getOptions() {
   return options;
 }
 function saveOptions(opt) {
+  for (let key in opt) {
+    options[key] = opt[key];
+  }
+
   // save options if executed in browser (not in unit tests)
   if (typeof chrome != 'undefined') {
     chrome.storage.local.set(opt);
@@ -22,21 +26,21 @@ async function loadOptions() {
   }
 
   const defaultOptions = {
-    greetings: true,
-    safemode: true,
-    discover: 'gallery',
-    discoverCat: "8",
-    name: 'Hello',
-    img: [],
-    imgUrl: [],
-    imgUrlPos: 0,
-    lastUrlUpdate: -1,
-    lastUpdate: -1,
-    interval: 60,
-    random: false,
-    lastPos: -1,
-    maxPos: 0,
-    cursor: false,
+    greetings: true,            // show the greetings text
+    name: 'Hello',              // name to be displayed (only in case of activated grretings)
+    safemode: true,             // only show safe pictures
+    discover: 'gallery',        // show pictures from the 'gallery' or from a named category (e.g. 'popular')
+    discoverCat: "8",           // id of the category (in case discover is not set to  gallery')
+    img: [],                    // list of cached images {data, url, author, link}
+    imgUrl: [],                 // list of pictures {url, author, link} received from 500px.com
+    imgUrlPos: 0,               // position of the images already loaded form imgUrl list into the cache
+    lastUrlUpdate: -1,          // time when the imgUrl has been loaded the last time (happens once a day)
+    lastUpdate: -1,             // time when the image cache has been updated the last time (happens every 'interval')
+    interval: 60,               // interval when to update the cache automatically to shpw the next 10 pictures
+    random: false,              // show a random picture from the cache or in order as they are loaded
+    lastPos: -1,                // the last position shown form the image cache (-1 if no picture has been shown)
+    maxPos: 0,                  // the largest position in the cache which has been shown
+    cursor: false,              // the search index of the last search for pagination
   }
 
   let opt = defaultOptions;
@@ -292,5 +296,4 @@ export {
   saveOptions,
   getOptions,
   options,
-  // addImage,
 }
