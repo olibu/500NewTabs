@@ -73,7 +73,7 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
   }
 
   // update the image list once a day or in case of update cache in options dialog
-  if (forceUrlUpdate || options.lastUrlUpdate === -1 || options.lastUrlUpdate + 1000 * 60 * 60 * 24 < new Date().getTime()) {
+  if (forceUrlUpdate || options.lastUrlUpdate === -1 || options.lastUrlUpdate + 1000 * 60 * 60 * 24 <= new Date().getTime()) {
     console.log('updating image URL list');
     try {
       const images = await getImages(false); // get images from the beginning
@@ -81,6 +81,8 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       options.imgUrlPos = 0;
       options.lastUrlUpdate = new Date().getTime();
       options.maxPos = 0;
+      options.lastPos = 0;
+      options.img = [];
       
       saveOptions(options);
     } catch (e) {
