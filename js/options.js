@@ -29,6 +29,7 @@ function save_options() {
   // Update status to let user know options were saved.
   showStatus(chrome.i18n.getMessage('options_saved'));
   updateCache(true, true);
+  window.close();
 }
 
 // show text in status span for 2 seconds
