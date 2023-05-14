@@ -40,7 +40,7 @@ async function setBackgroundImage() {
         pos = Math.floor(Math.random() * options.img.length);
       }
       options.lastPos = pos;
-      options.maxPos = -1; // in this case it cannot be guaranteed that all images are shown
+      options.maxPos = 10; // in this case it cannot be guaranteed that all images are shown so expect all images have been shown
     }
 
     // show the background image
