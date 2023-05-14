@@ -251,15 +251,6 @@ async function getImages(useCursor) {
   return images;
 }
 
-function includesAttribValue(array, attr, value) {
-  for (let a of array) {
-    if (a[attr] === value) {
-      return true;
-    }
-  }
-  return false;
-}
-
 export {
   loadOptions,
   updateCache,
