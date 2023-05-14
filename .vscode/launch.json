@@ -9,7 +9,7 @@
       "autoAttachChildProcesses": true,
       "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
       "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
-      "args": ["run", "--test-timeout", "${relativeFile}"],
+      "args": ["run", "--test-timeout=50000", "${relativeFile}"],
       "smartStep": true,
       "console": "integratedTerminal"
     }
