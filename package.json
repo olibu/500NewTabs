@@ -6,7 +6,8 @@
   "scripts": {
     "start": "vite build --sourcemap",
     "build": "vite build",
-    "test": "vitest --globals",
+    "test": "vitest --globals run",
+    "testmon": "vitest --globals",
     "coverage": "vitest run --coverage"
   },
   "devDependencies": {
