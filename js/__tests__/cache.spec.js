@@ -119,9 +119,30 @@ describe('updateCache Testcases', async () => {
 
     // get the first bunch of images starting from the top
     await updateCache();
-
+    
     // console.log(options);
     expect(options.imgUrlPos).toBe(11);
+    expect(options.maxPos).toBe(0);
+  });
+
+  it('should updateCache with URL list from the beginning after the day expired', async () => {
+    const options = getOptions();
+    
+    const dateLast = new Date('2000-01-01T00:00:00.000Z');
+    const date = new Date('2000-01-02T00:00:00.000Z');
+    vi.setSystemTime(date)
+    
+    options.imgUrlPos = 10;
+    options.lastPos = 1;
+    options.maxPos = 1;
+    options.lastUpdate = dateLast.getTime();
+    options.lastUrlUpdate = dateLast.getTime();
+    
+    // get the first bunch of images starting from the top
+    await updateCache();
+    
+    expect(options.imgUrlPos).toBe(10);
+    expect(options.maxPos).toBe(0);
   });
 
 })
