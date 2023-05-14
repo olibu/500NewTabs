@@ -102,8 +102,24 @@ function padLeft(num) {
 // update the cache with the next set of images (but not the whole image cache)
 // and show the first image
 async function renew() {
+  spinOn(document.getElementById('renew'));
   await updateCache(true);
   setBackgroundImage();
+  spinOff(document.getElementById('renew'));
+}
+
+async function refresh() {
+  spinOn(document.getElementById('refresh'));
+  await setBackgroundImage();
+  spinOff(document.getElementById('refresh'));
+}
+
+function spinOn(obj) {
+  obj.classList.add('rotate');
+}
+
+function spinOff(obj) {
+  obj.classList.remove('rotate');
 }
 
 // executed on every new page view
@@ -121,7 +137,7 @@ async function init() {
   updateCache();
 
   // add the click handler for the two buttons
-  document.getElementById('refresh').onclick = setBackgroundImage;
+  document.getElementById('refresh').onclick = refresh;
   document.getElementById('renew').onclick = renew;
 }
 

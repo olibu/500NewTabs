@@ -39,6 +39,15 @@
         }
       }
 
+      @keyframes rotation {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(359deg);
+        }
+      }
+
       .time {
         cursor: default;
         font-family: -apple-system, BlinkMacSystemFont, 'Neue Haas Grotesk Text Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -83,15 +92,19 @@
         margin-right: 10px;
         height: 30px;
       }
+      .rotate {
+        animation: rotation 2s infinite linear;
+        opacity: 1;
+      }
     </style>
   </head>
   <body>
     <div id="background">
       <div class="content">
         <div class="table">
-          <img id="renew" class="actions invertimg fadeMe" attr-i18n="title:newtab_renew" src="/img/renew.svg" width="30" height="30"/>
+          <img id="renew" class="actions invertimg" attr-i18n="title:newtab_renew" src="/img/renew.svg" width="30" height="30"/>
           <div id="time" class="time"></div>
-          <img id="refresh" class="actions invertimg fadeMe" attr-i18n="title:newtab_refresh" src="/img/refresh.svg" width="30" height="30"/>
+          <img id="refresh" class="actions invertimg" attr-i18n="title:newtab_refresh" src="/img/refresh.svg" width="30" height="30"/>
         </div>
         <div id="greeting" class="greeting"></div>
       </div>
