@@ -3,9 +3,7 @@ import { getImage } from './utils.js';
 const MAX_IMAGES = 10;
 
 let options;
-function setOptions(opt) {
-  options = opt;
-}
+
 function getOptions() {
   return options;
 }
@@ -31,13 +29,13 @@ async function loadOptions() {
     safemode: true,             // only show safe pictures
     discover: 'gallery',        // show pictures from the 'gallery' or from a named category (e.g. 'popular')
     discoverCat: "8",           // id of the category (in case discover is not set to  gallery')
+    interval: 60,               // interval when to update the cache automatically to shpw the next 10 pictures
+    random: false,              // show a random picture from the cache or in order as they are loaded
     img: [],                    // list of cached images {data, url, author, link}
     imgUrl: [],                 // list of pictures {url, author, link} received from 500px.com
     imgUrlPos: 0,               // position of the images already loaded form imgUrl list into the cache
     lastUrlUpdate: -1,          // time when the imgUrl has been loaded the last time (happens once a day)
     lastUpdate: -1,             // time when the image cache has been updated the last time (happens every 'interval')
-    interval: 60,               // interval when to update the cache automatically to shpw the next 10 pictures
-    random: false,              // show a random picture from the cache or in order as they are loaded
     lastPos: -1,                // the last position shown form the image cache (-1 if no picture has been shown)
     maxPos: 0,                  // the largest position in the cache which has been shown
     cursor: false,              // the search index of the last search for pagination
@@ -50,7 +48,7 @@ async function loadOptions() {
     opt = await chrome.storage.local.get(defaultOptions);
   }
   
-  setOptions(opt);
+  options = opt;
 }
 
 /**
@@ -60,7 +58,7 @@ async function loadOptions() {
  * Once a day the image URLs are loaded form 500px.
  * 
  * @param {*} forceUpdate Update image cache independent of interval time (default: false)
- * @param {*} forceUrlUpdate Update image URL list independent of interval time (default: false)
+ * @param {*} forceUrlUpdate Update image URL list independent of interval time and start from the beginning (default: false)
  * @returns 
  */
 async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
@@ -82,7 +80,7 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       options.imgUrl = images;
       options.imgUrlPos = 0;
       options.lastUrlUpdate = new Date().getTime();
-      options.maxPos = -1;
+      options.maxPos = 0;
       
       saveOptions(options);
     } catch (e) {
@@ -90,60 +88,37 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
     }
   }
 
-  
-  // update the image cache
+  // ensure that the list of image urls is large enough
+  if (!options.imgUrl || options.imgUrl.length < options.imgUrlPos + options.maxPos) {
+    console.log('updating image URL list as of missing urls');
+    try {
+      // there are not enough images in the image url list, thus try to get more
+      const images = await getImages(true); // get the next set of images from 500px
+      options.imgUrl.push(...images);
+    } catch (e) {
+      console.log('Not possible to update image URL list with further images', e);
+    }
+  }
+
+  // update the image cache with 10 new or at least unseen images
+
   try {
-    // add the amount of already seen images to the cache
-    // in case of unknown amout of images, expect that all images have been shown
-    // console.log('maxPos', options.maxPos);
-    let overflow = 0;
-    if (options.maxPos === -1) {
-      options.maxPos = MAX_IMAGES;
-    }
-    
-    for (let pos=0; pos <= options.maxPos; pos++) {
-      // get the image URL in the image list
-      // the imgUrlPos is the position of the images already loaded in the last update cycle
-      let imagePos = options.imgUrlPos + pos;
-      if (imagePos>=options.imgUrl.length) {
-        // try to get further results from 500px
-        const images = await getImages(true); // get the next set of images from 500px
-
-        // add the images to the imgUrlList
-        options.imgUrl.push(...images);
-
-        // try again
-        if (imagePos>=options.imgUrl.length) {
-          // start at the on top of the image url list in case the list is not long enough
-          imagePos -= options.imgUrl.length;
-          overflow++;
-        }
-      }
-
-      // check if the image is already in the cache
-      if (!includesAttribValue(options.img, 'url', options.imgUrl[imagePos].url)) {
-        // console.log('adding image', options.imgUrl[imagePos].url);
-        const image = await getImage(options.imgUrl[imagePos]);
-        options.img.push(image);
-      }
-      else {
-        // console.log('image already in cache ', options.imgUrl[imagePos].url);
-      }
-    }
-
-    // set the new position in the image URL list for the next update
-    options.imgUrlPos += options.maxPos;
-    if (overflow>0) {
-      // in case we had to start at the beginning of the list, set the overflow position as the new position
-      options.imgUrlPos = overflow;
-    }
-
-    // reduces size of cache
-    while (options.img.length > MAX_IMAGES) {
-      // remove the already seen images
-
-      // console.log('remove first element from cache');
+    // remove the seen images from the image cache
+    while (options.maxPos > 0) {
       options.img.shift();
+      options.maxPos--;
+    }
+
+    // load the next images
+    while (options.img.length < MAX_IMAGES) {
+      if (options.imgUrlPos >= options.imgUrl.length) {
+        // start form the beginning as there are not further images in the url list
+        options.imgUrlPos = 0;
+      }
+
+      const image = await getImage(options.imgUrl[options.imgUrlPos]);
+      options.img.push(image);
+      options.imgUrlPos++;
     }
 
     // store new images in local store
@@ -155,11 +130,6 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       lastPos: -1,
     });
     
-
-    // reset current position to start iteration at firt image
-    options.lastPos = -1;
-    options.maxPos = 0;
-
   } catch (e) {
     console.log('Not possible to update cache', e);
   }
@@ -292,7 +262,6 @@ export {
   loadOptions,
   updateCache,
   getImages,
-  setOptions,
   saveOptions,
   getOptions,
   options,
