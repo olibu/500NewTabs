@@ -43,6 +43,7 @@ async function loadOptions() {
 
   let opt = defaultOptions;
 
+  // in case this is running within chrome and not in vtest, load the data from the local storage
   if (typeof chrome != 'undefined') {
     opt.name = chrome.i18n.getMessage('greeting_name');
     opt = await chrome.storage.local.get(defaultOptions);
