@@ -2,13 +2,15 @@ import { loadOptions, options, updateCache, saveOptions } from '@/cache.js';
 
 // Saves options to chrome.storage
 function save_options() {
+  // see cache.js for documentation
   var greetings = document.getElementById('greetings').checked;
   var safemode = document.getElementById('safemode').checked;
   var discover = document.getElementById('discover').value;
-  var discoverCat = document.getElementById('discover_cat').value;
+  var discoverCat = getSelectedValues(document.getElementById('discover_cat'));
   var name = document.getElementById('name').value;
   var interval = parseInt(document.getElementById('interval').value);
   var random = document.getElementById('random').checked;
+
   saveOptions({
     greetings: greetings,
     safemode: safemode,
@@ -32,6 +34,39 @@ function save_options() {
   window.close();
 }
 
+// get the selected values from the select box
+function getSelectedValues(select) {
+  // check if "all" is selected
+  if (select.options[0].selected) {
+    return ["0"];
+  }
+
+  // in any other case return the values of the selected options as an array
+  let values = [];
+  for (let i=0; i < select.options.length; i++) {
+    if (select.options[i].selected) {
+      values.push(select.options[i].value);
+    }
+  }
+  return values;
+}
+
+// set the selected values for the select box
+function setSelectedValues(select, values) {
+  if (values) {
+    // check for array as of migration from earlier versions
+    if (!Array.isArray(values)) {
+      values = [values];
+    }
+    
+    for (let i=0; i < select.options.length; i++) {
+      if (values.includes(select.options[i].value)) {
+        select.options[i].selected = true;
+      }
+    }
+  }
+}
+
 // show text in status span for 2 seconds
 function showStatus(text) {
   var status = document.getElementById('status');
@@ -51,7 +86,7 @@ async function restore_options() {
   document.getElementById('greetings').checked = options.greetings;
   document.getElementById('safemode').checked = options.safemode;
   document.getElementById('discover').value = options.discover;
-  document.getElementById('discover_cat').value = options.discoverCat;
+  setSelectedValues(document.getElementById('discover_cat'), options.discoverCat);
   document.getElementById('name').value = options.name;
   document.getElementById('interval').value = options.interval;
   document.getElementById('random').checked = options.random;
