@@ -42,10 +42,13 @@ function getSelectedValues(select) {
   }
 
   // in any other case return the values of the selected options as an array
-  let values = [];
+  let values = '';
   for (let i=0; i < select.options.length; i++) {
     if (select.options[i].selected) {
-      values.push(select.options[i].value);
+      if (values != '') {
+        values += ',';
+      }
+      values += select.options[i].value;
     }
   }
   return values;
@@ -59,11 +62,9 @@ function setSelectedValues(select, values) {
       select.options[0].selected = true;
       return;
     }
-    // check for array as of migration from earlier versions
-    if (!Array.isArray(values)) {
-      values = [values];
-    }
     
+    values = values.split(',');
+
     for (let i=0; i < select.options.length; i++) {
       if (values.includes(select.options[i].value)) {
         select.options[i].selected = true;
