@@ -38,7 +38,7 @@ function save_options() {
 function getSelectedValues(select) {
   // check if "all" is selected
   if (select.options[0].selected) {
-    return ["0"];
+    return "0";
   }
 
   // in any other case return the values of the selected options as an array
@@ -54,6 +54,11 @@ function getSelectedValues(select) {
 // set the selected values for the select box
 function setSelectedValues(select, values) {
   if (values) {
+    // special behaviour for "all" option
+    if (values == "0") {
+      select.options[0].selected = true;
+      return;
+    }
     // check for array as of migration from earlier versions
     if (!Array.isArray(values)) {
       values = [values];
