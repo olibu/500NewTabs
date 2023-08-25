@@ -28,7 +28,7 @@ async function loadOptions() {
     name: 'Hello',              // name to be displayed (only in case of activated grretings)
     safemode: true,             // only show safe pictures
     discover: 'gallery',        // show pictures from the 'gallery' or from a named category (e.g. 'popular')
-    discoverCat: "8",           // id of the category (in case discover is not set to  gallery')
+    discoverCat: "8",           // comma separated ids of the categories (in case discover is not set to  gallery') in case of all value is "0"
     interval: 60,               // interval when to update the cache automatically to shpw the next 10 pictures
     random: false,              // show a random picture from the cache or in order as they are loaded
     img: [],                    // list of cached images {data, url, author, link}
