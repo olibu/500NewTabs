@@ -132,6 +132,12 @@ Gallery query:
 
 Detailed information about the releases can be found [here](https://github.com/olibu/500NewTabs/releases)
 
+## Future Features
+
+* sync the configuration in the user profile
+* show local image in case of missing local storage
+
+
 ## Disclaimer
 
 This extension is not affiliated with Goolge, 500px.com or any other pice of software mentioned at this site. It may stop working as soon as the backend API from the 500px web page changes.
