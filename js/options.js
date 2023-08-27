@@ -1,7 +1,7 @@
-import { loadOptions, options, updateCache, saveOptions } from '@/storage.js';
+import { loadConfig, config, updateCache, saveConfig } from '@/storage.js';
 
 // Saves options to chrome.storage
-function save_options() {
+async function save_options() {
   // see cache.js for documentation
   var greetings = document.getElementById('greetings').checked;
   var safemode = document.getElementById('safemode').checked;
@@ -11,7 +11,7 @@ function save_options() {
   var interval = parseInt(document.getElementById('interval').value);
   var random = document.getElementById('random').checked;
 
-  saveOptions({
+  saveConfig({
     greetings: greetings,
     safemode: safemode,
     discover: discover,
@@ -29,8 +29,9 @@ function save_options() {
     cursor: false,    
   });
   // Update status to let user know options were saved.
+  showStatus(chrome.i18n.getMessage('options_saving'));
+  await updateCache(true, true);
   showStatus(chrome.i18n.getMessage('options_saved'));
-  updateCache(true, true);
   window.close();
 }
 
@@ -85,17 +86,17 @@ function showStatus(text) {
 // Restores options using the preferences
 // stored in chrome.storage.
 async function restore_options() {
-  await loadOptions();
+  await loadConfig();
 
   addCategory();
 
-  document.getElementById('greetings').checked = options.greetings;
-  document.getElementById('safemode').checked = options.safemode;
-  document.getElementById('discover').value = options.discover;
-  setSelectedValues(document.getElementById('discover_cat'), options.discoverCat);
-  document.getElementById('name').value = options.name;
-  document.getElementById('interval').value = options.interval;
-  document.getElementById('random').checked = options.random;
+  document.getElementById('greetings').checked = config.greetings;
+  document.getElementById('safemode').checked = config.safemode;
+  document.getElementById('discover').value = config.discover;
+  setSelectedValues(document.getElementById('discover_cat'), config.discoverCat);
+  document.getElementById('name').value = config.name;
+  document.getElementById('interval').value = config.interval;
+  document.getElementById('random').checked = config.random;
 
 }
 
@@ -120,6 +121,7 @@ function addCategory() {
 // update the image cache
 async function update_cache() {
   try {
+    showStatus(chrome.i18n.getMessage('options_updating'));
     await updateCache(true, true);
     showStatus(chrome.i18n.getMessage('options_update_ok'));
   } catch (e) {

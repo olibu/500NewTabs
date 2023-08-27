@@ -26,6 +26,9 @@
   "options_save": {
     "message": "speichern"
   },
+  "options_saving": {
+    "message": "Optionen werden gespeichert ..."
+  },
   "options_saved": {
     "message": "Optionen wurden gespeichert!"
   },
@@ -37,6 +40,9 @@
   },
   "options_update": {
     "message": "Cache aktuallisieren"
+  },
+  "options_updating": {
+    "message": "Cache wird aktuallisiert ..."
   },
   "options_update_ok": {
     "message": "Cache wurde aktuallisiert!"

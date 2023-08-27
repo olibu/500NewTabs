@@ -26,6 +26,9 @@
   "options_save": {
     "message": "save"
   },
+  "options_saving": {
+    "message": "Saving options ..."
+  },
   "options_saved": {
     "message": "Options saved!"
   },
@@ -37,6 +40,9 @@
   },
   "options_update": {
     "message": "update cache"
+  },
+  "options_updating": {
+    "message": "Updating cache ..."
   },
   "options_update_ok": {
     "message": "Cache updated!"

@@ -1,12 +1,12 @@
 import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';
-import { getImages, loadOptions, saveOptions, updateCache, getOptions } from '../storage.js';
+import { getImages, loadConfig, saveConfig, updateCache, getConfig } from '../storage.js';
 
-loadOptions();
+loadConfig();
 
 describe('getImages Testcases', async () => {
   
   it('should getImages from 500px for gallery', async () => {
-    saveOptions({discover: 'gallery'});
+    saveConfig({discover: 'gallery'});
 
     const images = await getImages(false);
     const images2 = await getImages(false);
@@ -15,7 +15,7 @@ describe('getImages Testcases', async () => {
   });
 
   it('should getImages from 500px for gallery in a row', async () => {
-    saveOptions({discover: 'gallery'});
+    saveConfig({discover: 'gallery'});
 
     // get the first bunch of images starting from the top
     const images = await getImages(false);
@@ -55,94 +55,94 @@ describe('updateCache Testcases', async () => {
     }
   });
   
-  loadOptions();
+  loadConfig();
 
   it('should updateCache on first call', async () => {
-    const options = getOptions();
+    const config = getConfig();
 
     // get the first bunch of images starting from the top
     await updateCache();
 
-    expect(options.imgUrlPos).toBe(10);
-    expect(options.img).toHaveLength(10);
-    expect(options.img[0].url).toBe(options.imgUrl[0].url);
+    expect(config.imgUrlPos).toBe(10);
+    expect(config.img).toHaveLength(10);
+    expect(config.img[0].url).toBe(config.imgUrl[0].url);
   });
 
   it('should not updateCache on second call', async () => {
-    const options = getOptions();
+    const config = getConfig();
 
     // get the first bunch of images starting from the top
     await updateCache();
 
-    expect(options.imgUrlPos).toBe(10);
-    expect(options.img).toHaveLength(10);
-    expect(options.img[0].url).toBe(options.imgUrl[0].url);
+    expect(config.imgUrlPos).toBe(10);
+    expect(config.img).toHaveLength(10);
+    expect(config.img[0].url).toBe(config.imgUrl[0].url);
   });
 
   it('should not updateCache on second call if forced as no images have been shown', async () => {
-    const options = getOptions();
+    const config = getConfig();
 
     // get the first bunch of images starting from the top
     await updateCache(true);
 
-    expect(options.imgUrlPos).toBe(10);
-    expect(options.img).toHaveLength(10);
-    expect(options.img[0].url).toBe(options.imgUrl[0].url);
+    expect(config.imgUrlPos).toBe(10);
+    expect(config.img).toHaveLength(10);
+    expect(config.img[0].url).toBe(config.imgUrl[0].url);
   });
 
   it('should updateCache on second call if forced and images are shown', async () => {
-    const options = getOptions();
+    const config = getConfig();
 
-    options.lastPos = 1;
-    options.maxPos = 1;
+    config.lastPos = 1;
+    config.maxPos = 1;
 
     // get the first bunch of images starting from the top
     await updateCache(true);
 
-    expect(options.imgUrlPos).toBe(11);
-    expect(options.img).toHaveLength(10);
-    expect(options.img[0].url).toBe(options.imgUrl[1].url);
+    expect(config.imgUrlPos).toBe(11);
+    expect(config.img).toHaveLength(10);
+    expect(config.img[0].url).toBe(config.imgUrl[1].url);
   });
 
   it('should updateCache with new images if interval has expired', async () => {
-    const options = getOptions();
+    const config = getConfig();
     
     const dateLast = new Date('2000-01-01T00:00:00.000Z');
     const date = new Date();
-    date.setTime(dateLast.getTime() + (options.interval*60*1000));
+    date.setTime(dateLast.getTime() + (config.interval*60*1000));
     vi.setSystemTime(date)
     
-    options.lastUpdate = dateLast.getTime();
-    options.imgUrlPos = 10;
-    options.lastPos = 1;
-    options.maxPos = 1;
+    config.lastUpdate = dateLast.getTime();
+    config.imgUrlPos = 10;
+    config.lastPos = 1;
+    config.maxPos = 1;
 
     // get the first bunch of images starting from the top
     await updateCache();
     
-    // console.log(options);
-    expect(options.imgUrlPos).toBe(11);
-    expect(options.maxPos).toBe(0);
+    // console.log(config);
+    expect(config.imgUrlPos).toBe(11);
+    expect(config.maxPos).toBe(0);
   });
 
   it('should updateCache with URL list from the beginning after the day expired', async () => {
-    const options = getOptions();
+    const config = getConfig();
     
     const dateLast = new Date('2000-01-01T00:00:00.000Z');
     const date = new Date('2000-01-02T00:00:00.000Z');
     vi.setSystemTime(date)
     
-    options.imgUrlPos = 10;
-    options.lastPos = 1;
-    options.maxPos = 1;
-    options.lastUpdate = dateLast.getTime();
-    options.lastUrlUpdate = dateLast.getTime();
+    config.imgUrlPos = 10;
+    config.lastPos = 1;
+    config.maxPos = 1;
+    config.lastUpdate = dateLast.getTime();
+    config.lastUrlUpdate = dateLast.getTime();
     
     // get the first bunch of images starting from the top
     await updateCache();
     
-    expect(options.imgUrlPos).toBe(10);
-    expect(options.maxPos).toBe(0);
+    expect(config.imgUrlPos).toBe(10);
+    expect(config.maxPos).toBe(0);
   });
 
 })
