@@ -1,12 +1,13 @@
 import { loadConfig, config, updateCache } from '@/storage.js';
 
 async function setBackgroundImage() {
-  console.log('initial',config);
-  console.log('length',config.img.length);
-  // if (config.img.length == 0) {
-  //   // special behavior for first time
-  //   await updateCache();
-  // }
+  if (config.img.length == 0) {
+    // special behavior for first time
+    var greetingField = document.getElementById('greeting');
+    greetingField.textContent = chrome.i18n.getMessage('initial_waiting');
+    await updateCache();
+    setDateGreeting();
+  }
 
   const backgroundField = document.getElementById('background');
   const authorField = document.getElementById('author');
@@ -128,7 +129,7 @@ async function init() {
   await loadConfig();
 
   // show the greetings message and start the timer for regular update
-  setDateGreeting();
+  await setDateGreeting();
 
   // show the current background image
   await setBackgroundImage();

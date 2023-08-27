@@ -172,5 +172,8 @@
   },
   "newtab_refresh": {
     "message": "Show different image"
+  },
+  "initial_waiting": {
+    "message": "Loading initial images ..."
   }
 }

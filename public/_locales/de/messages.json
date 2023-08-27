@@ -172,5 +172,8 @@
   },
   "newtab_refresh": {
     "message": "Bild wechseln"
+  },
+  "initial_waiting": {
+    "message": "Laden initiale Bilder ..."
   }
 }
