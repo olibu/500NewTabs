@@ -7,9 +7,9 @@ let config;
 function getConfig() {
   return config;
 }
-function saveConfig(config) {
-  for (let key in config) {
-    config[key] = config[key];
+function saveConfig(conf) {
+  for (let key in conf) {
+    config[key] = conf[key];
   }
 
   // save options if executed in browser (not in unit tests)
