@@ -36,7 +36,7 @@ async function save_options() {
 }
 
 // get the selected values from the select box
-function getSelectedValues(select) {
+export function getSelectedValues(select) {
   // check if "all" is selected
   if (select.options[0].selected) {
     return "0";
@@ -56,7 +56,7 @@ function getSelectedValues(select) {
 }
 
 // set the selected values for the select box
-function setSelectedValues(select, values) {
+export function setSelectedValues(select, values) {
   if (values) {
     // special behaviour for "all" option
     if (values == "0") {
@@ -130,5 +130,11 @@ async function update_cache() {
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('save').addEventListener('click', save_options);
-document.getElementById('update').addEventListener('click', update_cache);
+const save = document.getElementById('save');
+if (save) {
+  save.addEventListener('click', save_options);
+}
+const update = document.getElementById('update');
+if (update) {
+  update.addEventListener('click', update_cache);
+}
