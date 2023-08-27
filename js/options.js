@@ -3,6 +3,7 @@ import { loadConfig, config, updateCache, saveConfig } from '@/storage.js';
 // Saves options to chrome.storage
 async function save_options() {
   // see cache.js for documentation
+  document.getElementById('spinning').style.visibility = "visible";
   var greetings = document.getElementById('greetings').checked;
   var safemode = document.getElementById('safemode').checked;
   var discover = document.getElementById('discover').value;
@@ -25,6 +26,7 @@ async function save_options() {
   showStatus(chrome.i18n.getMessage('options_saving'));
   await updateCache(true, true);
   showStatus(chrome.i18n.getMessage('options_saved'));
+  document.getElementById('spinning').style.visibility = "hidden";
   window.close();
 }
 
@@ -113,6 +115,7 @@ function addCategory() {
 
 // update the image cache
 async function update_cache() {
+  document.getElementById('spinning').style.visibility = "visible";
   try {
     showStatus(chrome.i18n.getMessage('options_updating'));
     await updateCache(true, true);
@@ -120,6 +123,7 @@ async function update_cache() {
   } catch (e) {
     showStatus(chrome.i18n.getMessage('options_update_error'));
   }
+  document.getElementById('spinning').style.visibility = "hidden";
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
