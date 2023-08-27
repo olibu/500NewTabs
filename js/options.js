@@ -7,6 +7,7 @@ async function save_options() {
   var safemode = document.getElementById('safemode').checked;
   var discover = document.getElementById('discover').value;
   var discoverCat = getSelectedValues(document.getElementById('discover_cat'));
+  alert(discoverCat)
   var name = document.getElementById('name').value;
   var interval = parseInt(document.getElementById('interval').value);
   var random = document.getElementById('random').checked;
@@ -18,15 +19,7 @@ async function save_options() {
     discoverCat: discoverCat,
     name: name,
     interval: interval,
-    random: random,
-    img: [],          
-    imgUrl: [],       
-    imgUrlPos: 0,     
-    lastUrlUpdate: -1,
-    lastUpdate: -1,   
-    lastPos: -1,      
-    maxPos: 0,        
-    cursor: false,    
+    random: random, 
   });
   // Update status to let user know options were saved.
   showStatus(chrome.i18n.getMessage('options_saving'));
