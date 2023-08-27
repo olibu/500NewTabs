@@ -1,4 +1,4 @@
-import { loadOptions, options, updateCache, saveOptions } from '@/cache.js';
+import { loadOptions, options, updateCache, saveOptions } from '@/storage.js';
 
 // Saves options to chrome.storage
 function save_options() {

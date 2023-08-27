@@ -1,5 +1,5 @@
 import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';
-import { getImages, loadOptions, saveOptions, updateCache, getOptions } from '../cache.js';
+import { getImages, loadOptions, saveOptions, updateCache, getOptions } from '../storage.js';
 
 loadOptions();
 

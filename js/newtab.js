@@ -1,12 +1,12 @@
-import { loadOptions, options, updateCache } from '@/cache.js';
+import { loadOptions, options, updateCache } from '@/storage.js';
 
 async function setBackgroundImage() {
+  // console.log('initial',options);
+  // console.log('length',options.img.length);
   if (options.img.length == 0) {
     // special behavior for first time
     await updateCache();
   }
-
-  // console.log(`${options.img.length} cached images available`);
 
   const backgroundField = document.getElementById('background');
   const authorField = document.getElementById('author');
