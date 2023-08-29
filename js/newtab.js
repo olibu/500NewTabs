@@ -1,14 +1,8 @@
 import { loadConfig, config, updateCache } from '@/storage.js';
 
-async function setBackgroundImage() {
-  if (config.img.length == 0) {
-    // special behavior for first time
-    var greetingField = document.getElementById('greeting');
-    greetingField.textContent = chrome.i18n.getMessage('initial_waiting');
-    await updateCache();
-    setDateGreeting();
-  }
+let isWaiting = false;
 
+async function setBackgroundImage() {
   const backgroundField = document.getElementById('background');
   const authorField = document.getElementById('author');
 
@@ -56,12 +50,20 @@ async function setBackgroundImage() {
     });
   } else {
     // in case of missing cached images, show the one distributed with the extension
+    isWaiting = true;
+    setDateGreeting();
 
     // console.log('using fallback image');
     const imgUrl = new URL('../img/bg.jpeg', import.meta.url).href
     backgroundField.style.background = 'url(' + imgUrl + ')';
     authorField.innerHTML = '&copy; olibu';
     authorField.href = 'https://500px.com/photo/1059193515/bookshelfs-in-the-abbey-of-neustift-by-olibu';
+
+    // special behavior for first time
+    await updateCache();
+    isWaiting = false;
+    setBackgroundImage();
+    setDateGreeting();
   }
 }
 
@@ -83,6 +85,9 @@ async function setDateGreeting() {
 }
 
 async function greeting(hour) {
+  if (isWaiting) {
+    return chrome.i18n.getMessage('initial_waiting');
+  }
   if (hour >= 0 && hour < 12) {
     return chrome.i18n.getMessage('greeting_morning', config.name);
   } else if (hour >= 12 && hour < 17) {
