@@ -20,6 +20,9 @@
   "options_random": {
     "message": "Show random image"
   },
+  "options_time": {
+    "message": "Show time"
+  },
   "options_greetings": {
     "message": "Show greetings"
   },
@@ -166,6 +169,36 @@
   },
   "options_discover_cat_31": {
     "message": "Boudoir"
+  },
+  "options_title": {
+    "message": "500NewTabs - Options"
+  },
+  "options_tooltip_time": {
+    "message": "Show the time."
+  },
+  "options_tooltip_greetings": {
+    "message": "Show the greetings message \nbelow the time."
+  },
+  "options_tooltip_name": {
+    "message": "The name to be shown below \nthe current time."
+  },
+  "options_tooltip_discover": {
+    "message": "Load pictures from my gallery or \nfrom one of the discovery modes."
+  },
+  "options_tooltip_category": {
+    "message": "Show images only from selected categories. \nYou can select muliple once.\nCannot be selected in Gallery mode."
+  },
+  "options_tooltip_safemode": {
+    "message": "Do not show sexual pictures."
+  },
+  "options_tooltip_interval": {
+    "message": "Interval in minutes the shown images are \nreplaced with new onces."
+  },
+  "options_tooltip_random": {
+    "message": "Choose the next image by random instead of \nthe sequence of the pictures loaded from 500px."
+  },
+  "options_tooltip_update": {
+    "message": "Update the cached images."
   },
   "newtab_renew": {
     "message": "Update cached images"

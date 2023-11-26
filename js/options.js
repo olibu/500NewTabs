@@ -4,6 +4,7 @@ import { loadConfig, config, updateCache, saveConfig } from '@/storage.js';
 async function save_options() {
   // see cache.js for documentation
   document.getElementById('save').classList.add('is-loading');
+  var time = document.getElementById('time').checked;
   var greetings = document.getElementById('greetings').checked;
   var safemode = document.getElementById('safemode').checked;
   var discover = document.getElementById('discover').value;
@@ -13,6 +14,7 @@ async function save_options() {
   var random = document.getElementById('random').checked;
 
   saveConfig({
+    time: time,
     greetings: greetings,
     safemode: safemode,
     discover: discover,
@@ -83,6 +85,7 @@ async function restore_options() {
 
   addCategory();
 
+  document.getElementById('time').checked = config.time;
   document.getElementById('greetings').checked = config.greetings;
   document.getElementById('safemode').checked = config.safemode;
   document.getElementById('discover').value = config.discover;

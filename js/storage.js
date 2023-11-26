@@ -24,6 +24,7 @@ async function loadConfig() {
   }
 
   const defaultConfig = {
+    time: true,                 // show the time
     greetings: true,            // show the greetings text
     name: 'Hello',              // name to be displayed (only in case of activated grretings)
     safemode: true,             // only show safe pictures
@@ -66,10 +67,13 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
   // ensure that options are available
   await loadConfig();
 
+  // console.log('Next update check: ', new Date(config.lastUpdate + 1000 * 60 * config.interval));
+
   // check for last update
   if (!forceUrlUpdate && !forceUpdate && !config.lastUpdate !== -1 && config.lastUpdate + 1000 * 60 * config.interval > new Date().getTime()) {
     // nothing to do. Waiting for next cache update interval
     // no enforcement of the update
+    // console.log('nothing to update');
     return;
   }
 
@@ -81,9 +85,11 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       config.imgUrl = images;
       config.imgUrlPos = 0;
       config.lastUrlUpdate = new Date().getTime();
-      config.maxPos = 0;
-      config.lastPos = 0;
-      config.img = [];
+      if (!config.img) {
+        config.maxPos = 0;
+        config.lastPos = 0;
+        config.img = [];
+      }
       
       saveConfig(config);
     } catch (e) {
@@ -107,6 +113,7 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
 
   try {
     // remove the seen images from the image cache
+    // console.log(`Removing ${config.maxPos} cached images.`);
     while (config.maxPos > 0) {
       config.img.shift();
       config.maxPos--;
@@ -122,6 +129,7 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       const image = await getImage(config.imgUrl[config.imgUrlPos]);
       config.img.push(image);
       config.imgUrlPos++;
+      // console.log('Adding image');
     }
 
     // store new images in local store

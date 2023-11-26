@@ -49,6 +49,13 @@ async function setBackgroundImage() {
       maxPos: config.maxPos,
     });
   } else {
+    // console.log('img cache size', config.img.length, config.img);
+    // try {
+    //   console.log(config.img[0]);
+    // }
+    // catch (e) {}
+    // await loadConfig();
+    // console.log('img cache size after load', config.img.length, config.img);
     // in case of missing cached images, show the one distributed with the extension
     isWaiting = true;
     setDateGreeting();
@@ -70,16 +77,19 @@ async function setBackgroundImage() {
 async function setDateGreeting() {
   var timeField = document.getElementById('time');
   var greetingField = document.getElementById('greeting');
-  var today = new Date();
-  var h = today.getHours();
-  var m = today.getMinutes();
-  timeField.textContent = padLeft(h) + ':' + padLeft(m);
+  if (config.time) {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    timeField.textContent = padLeft(h) + ':' + padLeft(m);
+  } else {
+    timeField.textContent = '';
+  }
   if (config.greetings) {
     greetingField.textContent = await greeting(h);
   } else {
     greetingField.textContent = '';
   }
-
   // start a timer to update the time and message in case the new tab page is shown for a longer time
   setTimeout(setDateGreeting, 10000);
 }

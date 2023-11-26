@@ -20,6 +20,9 @@
   "options_random": {
     "message": "Zufälliges Bild anzeigen"
   },
+  "options_time": {
+    "message": "Zeit anzeigen"
+  },
   "options_greetings": {
     "message": "Begrüßung anzeigen"
   },
@@ -166,6 +169,36 @@
   },
   "options_discover_cat_31": {
     "message": "Boudoir"
+  },
+  "options_title": {
+    "message": "500NewTabs - Einstellungen"
+  },
+  "options_tooltip_time": {
+    "message": "Soll die Uhrzeit angezeigt werden?"
+  },
+  "options_tooltip_greetings": {
+    "message": "Soll der Begrüßungstext \nunter der Zeit angezeigt werden?"
+  },
+  "options_tooltip_name": {
+    "message": "Der Name der im Begrüßungstext \nangezeigt werden soll."
+  },
+  "options_tooltip_discover": {
+    "message": "Quelle der Bilder.\nMeine manuell gepflegte Gallerie oder \neine der Standardlisten von 500px."
+  },
+  "options_tooltip_category": {
+    "message": "Wählen Sie die Kategorien \nder Bilder oder alle.\nKann nicht in Verbindung mit \nder Gallerie ausgewählt werden."
+  },
+  "options_tooltip_safemode": {
+    "message": "Verhindert, dass anzügliche Bilder \nangezeigt werden."
+  },
+  "options_tooltip_interval": {
+    "message": "Interval in Minuten in dem \ndie Bilder aktuallisiert werden."
+  },
+  "options_tooltip_random": {
+    "message": "Sollen die Bilder zufällig ausgewählt werden?\nSonst werden sie in der \nReihenfolge von 500px angezeigt."
+  },
+  "options_tooltip_update": {
+    "message": "Aktuallisiert die gecachten Bilder."
   },
   "newtab_renew": {
     "message": "Cache aktuallisieren"

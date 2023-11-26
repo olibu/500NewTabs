@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>500NewTabs - Options</title>
+  <title data-i18n="options_title">500NewTabs - Options</title>
   <link rel="stylesheet" href="./css/bulma.min.css">
   <link rel="stylesheet" href="./css/bulma.tooltip.min.css">
   <link rel="stylesheet" href="./css/options.css">
@@ -12,7 +12,7 @@
   <div class="modal is-active">
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">500NewTabs - Options</p>
+        <p class="modal-card-title" data-i18n="options_title">500NewTabs - Options</p>
       </header>
       <section class="modal-card-body">
         <form>
@@ -20,8 +20,22 @@
             <div class="column is-4">
               <label 
                 class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline" 
+                data-i18n="options_time" 
+                attr-i18n="data-tooltip:options_tooltip_time"
+              >
+                Show Time
+              </label>
+            </div>
+            <div class="column is-8">
+              <input type="checkbox" id="time">
+            </div>
+
+          <div class="columns is-gapless is-multiline">
+            <div class="column is-4">
+              <label 
+                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline" 
                 data-i18n="options_greetings" 
-                data-tooltip="Show the greetings message &#10;below the time"
+                attr-i18n="data-tooltip:options_tooltip_greetings"
               >
                 Show Greetings
               </label>
@@ -32,9 +46,20 @@
 
             <div class="column is-4">
               <label 
+                data-i18n="options_name"
+                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
+                attr-i18n="data-tooltip:options_tooltip_name"
+              >Name</label>
+            </div>
+            <div class="column is-8">
+              <input class="input" type="text" id="name">
+            </div>
+
+            <div class="column is-4">
+              <label 
                 data-i18n="options_discover"
                 class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
-                data-tooltip="Load pictures from my gallery or &#10;from one of the discovery modes"
+                attr-i18n="data-tooltip:options_tooltip_discover"
               >
                 Discover Mode
               </label>
@@ -56,7 +81,7 @@
               <label 
                 data-i18n="options_discover_category"
                 class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
-                data-tooltip="Show images only from selected categories. &#10;You can select muliple once.&#10;Cannot be selected in Gallery mode."
+                attr-i18n="data-tooltip:options_tooltip_category"
               >Category</label>
             </div>
             <div class="column is-8">
@@ -71,7 +96,7 @@
               <label 
                 data-i18n="options_safemode"
                 class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
-                data-tooltip="Do not show sexual pictures."
+                attr-i18n="data-tooltip:options_tooltip_safemode"
               >Safemode</label>
             </div>
             <div class="column is-8">
@@ -80,32 +105,21 @@
 
             <div class="column is-4">
               <label 
-                data-i18n="options_name"
-                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
-                data-tooltip="The name to be shown below the current time."
-              >Name</label>
-            </div>
-            <div class="column is-8">
-              <input type="text" id="name">
-            </div>
-
-            <div class="column is-4">
-              <label 
                 data-i18n="options_interval"
                 class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
-                data-tooltip="Interval in minutes the shown images are &#10;replaced with new onces."
+                attr-i18n="data-tooltip:options_tooltip_interval"
               >Interval</label>
             </div>
             <div class="column is-8">
-              <input type="text" id="interval">
+              <input class="input" type="text" id="interval">
             </div>
 
             <div class="column is-4">
               <label 
                 data-i18n="options_random"
                 class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
-                data-tooltip="Choose the next image by random instead of &#10;the sequence of the pictures loaded from 500px."
-              >Zufällig</label>
+                attr-i18n="data-tooltip:options_tooltip_random"
+              >Random order</label>
             </div>
             <div class="column is-8">
               <input type="checkbox" id="random">
@@ -120,6 +134,7 @@
           id="update" 
           data-i18n="options_update"
           class="button is-link"
+          attr-i18n="data-tooltip:options_tooltip_update"
           data-tooltip="Update the cached images."
         >Update</button>
         <button class="button is-primary" id="save" data-i18n="options_save">Save</button>

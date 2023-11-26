@@ -1,6 +1,6 @@
 ### New Features:
-- Multiple categories can be selected
-- Information when initially loading images
+- New intuitive options dialog
+- Time can be hidden
 
 ### Bugfixes:
-- none
+- Image cache not lost anymore
