@@ -3,12 +3,11 @@ import { loadConfig, config, updateCache, saveConfig } from '@/storage.js';
 // Saves options to chrome.storage
 async function save_options() {
   // see cache.js for documentation
-  document.getElementById('spinning').style.visibility = "visible";
+  document.getElementById('save').classList.add('is-loading');
   var greetings = document.getElementById('greetings').checked;
   var safemode = document.getElementById('safemode').checked;
   var discover = document.getElementById('discover').value;
   var discoverCat = getSelectedValues(document.getElementById('discover_cat'));
-  alert(discoverCat)
   var name = document.getElementById('name').value;
   var interval = parseInt(document.getElementById('interval').value);
   var random = document.getElementById('random').checked;
@@ -23,11 +22,8 @@ async function save_options() {
     random: random, 
   });
   // Update status to let user know options were saved.
-  showStatus(chrome.i18n.getMessage('options_saving'));
   await updateCache(true, true);
-  showStatus(chrome.i18n.getMessage('options_saved'));
-  document.getElementById('spinning').style.visibility = "hidden";
-  window.close();
+  document.getElementById('save').classList.remove('is-loading');
 }
 
 // get the selected values from the select box
@@ -73,8 +69,10 @@ export function setSelectedValues(select, values) {
 function showStatus(text) {
   var status = document.getElementById('status');
   status.textContent = text;
+  status.style.display = 'block';
   setTimeout(function () {
     status.textContent = '';
+    status.style.display = 'none';
   }, 2000);
 }
 
@@ -92,6 +90,7 @@ async function restore_options() {
   document.getElementById('name').value = config.name;
   document.getElementById('interval').value = config.interval;
   document.getElementById('random').checked = config.random;
+  updateCategory();
 
 }
 
@@ -115,15 +114,25 @@ function addCategory() {
 
 // update the image cache
 async function update_cache() {
-  document.getElementById('spinning').style.visibility = "visible";
+  document.getElementById('update').classList.add('is-loading');
   try {
-    showStatus(chrome.i18n.getMessage('options_updating'));
     await updateCache(true, true);
-    showStatus(chrome.i18n.getMessage('options_update_ok'));
   } catch (e) {
     showStatus(chrome.i18n.getMessage('options_update_error'));
   }
-  document.getElementById('spinning').style.visibility = "hidden";
+  document.getElementById('update').classList.remove('is-loading');
+}
+
+function updateCategory() {
+  const discover = document.getElementById('discover');
+  const category = document.getElementById('discover_cat'); 
+
+  if (discover.options[0].selected) {
+    category.disabled = true;
+  }
+  else {
+    category.disabled = false;
+  }
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
@@ -134,4 +143,8 @@ if (save) {
 const update = document.getElementById('update');
 if (update) {
   update.addEventListener('click', update_cache);
+}
+const discover = document.getElementById('discover');
+if (discover) {
+  discover.addEventListener('change', updateCategory);
 }

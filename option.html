@@ -1,182 +1,132 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Options</title>
-  <style>
-    body { 
-      padding: 10px; 
-      margin: 10px; 
-    }
-
-    label {
-      display:block;
-    }
-
-    table {
-      border: 0px;
-      padding: 5px;
-    }
-
-    #spinning {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      width: 100%;
-      height: 100%;
-      background-color: #eeeeeecc;
-      visibility: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center
-    }
-
-    #spinner {
-      width: 100px;
-      height: 100px;
-      -webkit-animation-name: spin;
-      -webkit-animation-duration: 2000ms;
-      -webkit-animation-iteration-count: infinite;
-      -webkit-animation-timing-function: linear;
-      -moz-animation-name: spin;
-      -moz-animation-duration: 2000ms;
-      -moz-animation-iteration-count: infinite;
-      -moz-animation-timing-function: linear;
-      -ms-animation-name: spin;
-      -ms-animation-duration: 2000ms;
-      -ms-animation-iteration-count: infinite;
-      -ms-animation-timing-function: linear;
-      animation-name: spin;
-      animation-duration: 2000ms;
-      animation-iteration-count: infinite;
-      animation-timing-function: linear;
-    }
-
-    @-ms-keyframes spin {
-      from {
-        -ms-transform: rotate(0deg);
-      }
-      to {
-        -ms-transform: rotate(360deg);
-      }
-    }
-
-    @-moz-keyframes spin {
-      from {
-        -moz-transform: rotate(0deg);
-      }
-      to {
-        -moz-transform: rotate(360deg);
-      }
-    }
-
-    @-webkit-keyframes spin {
-      from {
-        -webkit-transform: rotate(0deg);
-      }
-      to {
-        -webkit-transform: rotate(360deg);
-      }
-    }
-
-    @keyframes spin {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
-    }
-  </style>
+  <title>500NewTabs - Options</title>
+  <link rel="stylesheet" href="./css/bulma.min.css">
+  <link rel="stylesheet" href="./css/bulma.tooltip.min.css">
+  <link rel="stylesheet" href="./css/options.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-  <table>
-    <tr>
-      <td>
-        <span data-i18n="options_greetings"></span>
-      </td>
-      <td>
-        <input type="checkbox" id="greetings">
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <span data-i18n="options_discover">Discover</span>
-      </td>
-      <td>
-        <select id="discover" style="width: 150px">
-          <option value="gallery" data-i18n="options_discover_1">Gallery</option>
-          <option value="" data-i18n="options_discover_6">All</option>
-          <option value="popular" data-i18n="options_discover_2">Popular</option>
-          <option value="upcoming" data-i18n="options_discover_3">Upcoming</option>
-          <option value="fresh" data-i18n="options_discover_4">Fresh</option>
-          <option value="editors" data-i18n="options_discover_5">Editors Choice</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <span data-i18n="options_discover_category">Category</span>
-      </td>
-      <td>
-        <select id="discover_cat" multiple size="20" style="width: 150px">
-          <option value="0" data-i18n="options_discover_cat_0">all</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <span data-i18n="options_safemode"></span>
-      </td>
-      <td>
-        <input type="checkbox" id="safemode">
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <span data-i18n="options_name"></span>: 
-      </td>
-      <td>
-        <input type="text" id="name">
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <span data-i18n="options_interval"></span>: 
-      </td>
-      <td>
-        <input type="text" id="interval">
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <span data-i18n="options_random"></span>: 
-      </td>
-      <td>
-        <input type="checkbox" id="random">
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <span id="status"></span>
-      </td>
-      <td>
-        <br>
-        <button id="save" data-i18n="options_save"></button>
-        <button id="update" data-i18n="options_update"></button>
-      </td>
-    </tr>
-  </table>
+  <div class="modal is-active">
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">500NewTabs - Options</p>
+      </header>
+      <section class="modal-card-body">
+        <form>
+          <div class="columns is-gapless is-multiline">
+            <div class="column is-4">
+              <label 
+                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline" 
+                data-i18n="options_greetings" 
+                data-tooltip="Show the greetings message &#10;below the time"
+              >
+                Show Greetings
+              </label>
+            </div>
+            <div class="column is-8">
+              <input type="checkbox" id="greetings">
+            </div>
 
-  <div id="spinning">
-    <div id="spinner">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4335 4335" width="100" height="100">
-        <path fill="#008DD2" d="M3346 1077c41,0 75,34 75,75 0,41 -34,75 -75,75 -41,0 -75,-34 -75,-75 0,-41 34,-75 75,-75zm-1198 -824c193,0 349,156 349,349 0,193 -156,349 -349,349 -193,0 -349,-156 -349,-349 0,-193 156,-349 349,-349zm-1116 546c151,0 274,123 274,274 0,151 -123,274 -274,274 -151,0 -274,-123 -274,-274 0,-151 123,-274 274,-274zm-500 1189c134,0 243,109 243,243 0,134 -109,243 -243,243 -134,0 -243,-109 -243,-243 0,-134 109,-243 243,-243zm500 1223c121,0 218,98 218,218 0,121 -98,218 -218,218 -121,0 -218,-98 -218,-218 0,-121 98,-218 218,-218zm1116 434c110,0 200,89 200,200 0,110 -89,200 -200,200 -110,0 -200,-89 -200,-200 0,-110 89,-200 200,-200zm1145 -434c81,0 147,66 147,147 0,81 -66,147 -147,147 -81,0 -147,-66 -147,-147 0,-81 66,-147 147,-147zm459 -1098c65,0 119,53 119,119 0,65 -53,119 -119,119 -65,0 -119,-53 -119,-119 0,-65 53,-119 119,-119z"
-        />
-      </svg>
+            <div class="column is-4">
+              <label 
+                data-i18n="options_discover"
+                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
+                data-tooltip="Load pictures from my gallery or &#10;from one of the discovery modes"
+              >
+                Discover Mode
+              </label>
+            </div>
+            <div class="column is-8">
+              <div class="select">
+                <select id="discover" style="width: 200px">
+                  <option value="gallery" data-i18n="options_discover_1">Gallery</option>
+                  <option value="" data-i18n="options_discover_6">All</option>
+                  <option value="popular" data-i18n="options_discover_2">Popular</option>
+                  <option value="upcoming" data-i18n="options_discover_3">Upcoming</option>
+                  <option value="fresh" data-i18n="options_discover_4">Fresh</option>
+                  <option value="editors" data-i18n="options_discover_5">Editors Choice</option>
+                </select>
+                    </div>
+            </div>
+
+            <div class="column is-4">
+              <label 
+                data-i18n="options_discover_category"
+                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
+                data-tooltip="Show images only from selected categories. &#10;You can select muliple once.&#10;Cannot be selected in Gallery mode."
+              >Category</label>
+            </div>
+            <div class="column is-8">
+              <div class="select is-multiple">
+                <select id="discover_cat" multiple size="10" style="width: 200px" disabled>
+                  <option value="0" data-i18n="options_discover_cat_0">all</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="column is-4">
+              <label 
+                data-i18n="options_safemode"
+                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
+                data-tooltip="Do not show sexual pictures."
+              >Safemode</label>
+            </div>
+            <div class="column is-8">
+              <input type="checkbox" id="safemode">
+            </div>
+
+            <div class="column is-4">
+              <label 
+                data-i18n="options_name"
+                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
+                data-tooltip="The name to be shown below the current time."
+              >Name</label>
+            </div>
+            <div class="column is-8">
+              <input type="text" id="name">
+            </div>
+
+            <div class="column is-4">
+              <label 
+                data-i18n="options_interval"
+                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
+                data-tooltip="Interval in seconds the shown images are &#10;replaced with new onces."
+              >Interval</label>
+            </div>
+            <div class="column is-8">
+              <input type="text" id="interval">
+            </div>
+
+            <div class="column is-4">
+              <label 
+                data-i18n="options_random"
+                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
+                data-tooltip="Choose the next image by random instead of &#10;the sequence of the pictures loaded from 500px."
+              >Zufällig</label>
+            </div>
+            <div class="column is-8">
+              <input type="checkbox" id="random">
+            </div>
+          </div>
+
+          
+        </form>
+      </section>
+      <footer class="modal-card-foot">
+        <button 
+          id="update" 
+          data-i18n="options_update"
+          class="button is-link"
+          data-tooltip="Update the cached images."
+        >Update</button>
+        <button class="button is-primary" id="save" data-i18n="options_save">Save</button>
+        <div class="notification is-warning p-2 ml-5" id="status">Status information</div>
+      </footer>
     </div>
   </div>
-  
   <script src="js/options.js" type="module"></script>
   <script src="js/i18n.js" type="module"></script>
 </body>
