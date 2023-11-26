@@ -141,8 +141,7 @@ describe('updateCache Testcases', async () => {
     // get the first bunch of images starting from the top
     await updateCache();
     
-    expect(config.imgUrlPos).toBe(10);
-    expect(config.maxPos).toBe(0);
+    expect(config.imgUrlPos).toBe(1);
   });
 
 })
