@@ -1,6 +1,6 @@
 ### New Features:
-- New intuitive options dialog
-- Time can be hidden
+- Zoom animation on background
+- Animation on refresh/reload buttons
 
 ### Bugfixes:
-- Image cache not lost anymore
+- none
