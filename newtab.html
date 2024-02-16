@@ -13,21 +13,15 @@
       }
 
       #background {
+        position: absolute;
+        top: 0px;
+        left: 0px;
         width: 100%;
         height: 100%;
         background-color: black;
         background-size: cover !important;
         background-position: center;
-        animation: fadeIn 1s;
-        transition: background-image 1s ease-in-out;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .content {
-        color: #fff;
-        text-align: center;
+        animation: fadeIn 1s, zoomIn 30s forwards;
       }
 
       @keyframes fadeIn {
@@ -38,6 +32,15 @@
           opacity: 1;
         }
       }
+      
+      @keyframes zoomIn {
+        0% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(1.1);
+        }
+      }
 
       @keyframes rotation {
         from {
@@ -46,6 +49,23 @@
         to {
           transform: rotate(359deg);
         }
+      }
+
+      .content-container {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .content {
+        position: absolute;
+        color: #fff;
+        text-align: center;
       }
 
       .time {
@@ -100,6 +120,9 @@
   </head>
   <body>
     <div id="background">
+    </div>
+
+    <div class="content-container">
       <div class="content">
         <div class="table">
           <img id="renew" class="actions invertimg" attr-i18n="title:newtab_renew" src="/img/renew.svg" width="30" height="30"/>
@@ -108,8 +131,9 @@
         </div>
         <div id="greeting" class="greeting"></div>
       </div>
-      <a id="author" class="author" target="_blank"></a>
     </div>
+
+    <a id="author" class="author" target="_blank"></a>
 
     <script src="js/storage.js" type="module"></script>
     <script src="js/newtab.js" type="module"></script>
