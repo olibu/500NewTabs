@@ -72,6 +72,10 @@ async function setBackgroundImage() {
     setBackgroundImage();
     setDateGreeting();
   }
+
+  backgroundField.classList.remove('background-animation');
+  void backgroundField.offsetWidth; // -> triggering reflow
+  backgroundField.classList.add('background-animation');
 }
 
 async function setDateGreeting() {
