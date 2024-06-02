@@ -208,5 +208,26 @@
   },
   "initial_waiting": {
     "message": "Laden initiale Bilder ..."
+  },
+  "options_discover_7": {
+    "message": "Eigene Gallerie"
+  },
+  "options_custom_gallery": {
+    "message": "Eigene Gallerie"
+  },
+  "options_tooltip_custom_gallery": {
+    "message": "URL der Gallerie. Wird beim Speichern geprüft."
+  },
+  "options_update_error_gallery_short": {
+    "message": "Speichern fehlgeschlagen! Die URL der Gallerie is zu kurz."
+  },
+  "options_update_error_gallery_missing_p": {
+    "message": "Speichern fehlgeschlagen! In der URL der Gallerie fehlt der Parameter '/p/'"
+  },
+  "options_update_error_gallery_missing_galleries": {
+    "message": "Speichern fehlgeschlagen! In der URL der Gallerie fehlt der Parameter '/galleries/'"
+  },
+  "options_update_error_gallery_userid": {
+    "message": "Speichern fehlgeschlagen! Die Benutzerkennung '$1' konnte nicht gefunden werden."
   }
 }

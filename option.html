@@ -15,7 +15,6 @@
         <p class="modal-card-title" data-i18n="options_title">500NewTabs - Options</p>
       </header>
       <section class="modal-card-body">
-        <form>
           <div class="columns is-gapless is-multiline">
             <div class="column is-4">
               <label 
@@ -68,6 +67,7 @@
               <div class="select">
                 <select id="discover" style="width: 200px">
                   <option value="gallery" data-i18n="options_discover_1">Gallery</option>
+                  <option value="cgallery" data-i18n="options_discover_7">Custom Gallery</option>
                   <option value="" data-i18n="options_discover_6">All</option>
                   <option value="popular" data-i18n="options_discover_2">Popular</option>
                   <option value="upcoming" data-i18n="options_discover_3">Upcoming</option>
@@ -90,6 +90,17 @@
                   <option value="0" data-i18n="options_discover_cat_0">all</option>
                 </select>
               </div>
+            </div>
+
+            <div class="column is-4">
+              <label 
+                data-i18n="options_custom_gallery"
+                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
+                attr-i18n="data-tooltip:options_tooltip_custom_gallery"
+              >Custom Category</label>
+            </div>
+            <div class="column is-8">
+              <input class="input" type="text" id="cgalleryurl" disabled>
             </div>
 
             <div class="column is-4">
@@ -125,9 +136,7 @@
               <input type="checkbox" id="random">
             </div>
           </div>
-
           
-        </form>
       </section>
       <footer class="modal-card-foot">
         <button 

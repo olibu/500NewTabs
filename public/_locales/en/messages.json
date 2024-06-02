@@ -208,5 +208,26 @@
   },
   "initial_waiting": {
     "message": "Loading initial images ..."
+  },
+  "options_discover_7": {
+    "message": "Custom Gallery"
+  },
+  "options_custom_gallery": {
+    "message": "Custom Gallery"
+  },
+  "options_tooltip_custom_gallery": {
+    "message": "URL of the gallery. Will be validated when saved."
+  },
+  "options_update_error_gallery_short": {
+    "message": "Save failed! The URL is too short."
+  },
+  "options_update_error_gallery_missing_p": {
+    "message": "Save failed! The parameter '/p/' is missing in the URL of the gallery."
+  },
+  "options_update_error_gallery_missing_galleries": {
+    "message": "Save failed! The parameter '/galleries/' is missing in the URL of the gallery."
+  },
+  "options_update_error_gallery_userid": {
+    "message": "Save failed! The user ID '$1' could not be validated in the gallery URL."
   }
 }

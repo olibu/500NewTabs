@@ -1,6 +1,6 @@
 ### New Features:
-- Zoom animation on background
-- Animation on refresh/reload buttons
+- Select your own gallery
+- Vertical hight a little bit higher
 
 ### Bugfixes:
-- none
+- Update of directly reloades the images
