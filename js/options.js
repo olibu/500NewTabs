@@ -15,10 +15,17 @@ async function save_options() {
   var random = document.getElementById('random').checked;
 
   // check if custom gallery URL has changed to load id and slug
-  let gallery = await getGallery(cGalleryUrl);
-  if (gallery.legacyId === '' || gallery.slug === '') {
-    document.getElementById('save').classList.remove('is-loading');
-    return;
+  let gallery = {
+    legacyId: "",
+    slug: ""
+  }
+
+  if ( discover == 'cgallery') {
+    gallery = await getGallery(cGalleryUrl);
+    if (gallery.legacyId === '' || gallery.slug === '') {
+      document.getElementById('save').classList.remove('is-loading');
+      return;
+    }
   }
 
   saveConfig({
