@@ -2,6 +2,7 @@
    "manifest_version": 3,
    "name": "500NewTabs",
    "description": "New tab with images from 500px.com",
+   "requires_payment": false,
    "icons": {
       "128": "icons/icon128.png",
       "16": "icons/icon16.png",
@@ -15,14 +16,22 @@
    "chrome_url_overrides": {
       "newtab": "newtab.html"
    },
+   "chrome_settings_overrides" : {
+      "homepage": "newtab.html"
+   },
    "host_permissions": [
       "https://api.500px.com/*",
       "https://drscdn.500px.org/*"
     ],
    "permissions": [ "storage", "unlimitedStorage" ],
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "0.0.1",
+   "version": "0.0.2",
    "offline_enabled": true,
    "default_locale": "en",
-   "homepage_url": "https://github.com/olibu/500NewTabs"
+   "homepage_url": "https://github.com/olibu/500NewTabs",
+   "browser_specific_settings": {
+     "gecko": {
+       "id": "500newtabs@olibu.com"
+     }
+   }
 }

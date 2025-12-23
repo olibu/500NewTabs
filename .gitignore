@@ -3,3 +3,5 @@ releases/*
 dist
 node_modules
 coverage/*
+.env
+web-ext-artifacts

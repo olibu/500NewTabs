@@ -1,4 +1,4 @@
 ### New Features:
+- Compatibility with Firefox
 
 ### Bugfixes:
-- Options can be stored without gallery URL again

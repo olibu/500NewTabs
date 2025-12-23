@@ -8,12 +8,18 @@
     "build": "vite build",
     "test": "vitest --globals run",
     "testmon": "vitest --globals",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "build_ff": "vite build && web-ext --source-dir=dist build",
+    "test_ff": "vite build && web-ext --source-dir=dist run",
+    "sign_ff": "dotenv -- web-ext sign --source-dir=dist --channel=unlisted"
   },
   "devDependencies": {
     "@vitest/coverage-c8": "^0.30.1",
+    "dotenv": "^16.5.0",
+    "dotenv-cli": "^8.0.0",
     "jsdom": "^22.1.0",
     "vite": "^4.0.0",
-    "vitest": "^0.30.1"
+    "vitest": "^0.30.1",
+    "web-ext": "^8.6.0"
   }
 }
