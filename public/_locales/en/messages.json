@@ -20,6 +20,9 @@
   "options_random": {
     "message": "Show random image"
   },
+  "options_keepLastTab": {
+    "message": "Keep last tab open"
+  },
   "options_time": {
     "message": "Show time"
   },
@@ -196,6 +199,9 @@
   },
   "options_tooltip_random": {
     "message": "Choose the next image by random instead of \nthe sequence of the pictures loaded from 500px."
+  },
+  "options_tooltip_keepLastTab": {
+    "message": "Automatically open a new tab when the last tab is closed. \nYou have to restart the browser for this setting to take effect."
   },
   "options_tooltip_update": {
     "message": "Update the cached images."

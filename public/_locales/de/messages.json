@@ -20,6 +20,9 @@
   "options_random": {
     "message": "Zufälliges Bild anzeigen"
   },
+  "options_keepLastTab": {
+    "message": "Tab nicht schließen"
+  },
   "options_time": {
     "message": "Zeit anzeigen"
   },
@@ -196,6 +199,9 @@
   },
   "options_tooltip_random": {
     "message": "Sollen die Bilder zufällig ausgewählt werden?\nSonst werden sie in der \nReihenfolge von 500px angezeigt."
+  },
+  "options_tooltip_keepLastTab": {
+    "message": "Öffne automatisch einen neuen Tab, wenn der letzte Tab geschlossen wird.\nDu musst den Browser neu starten, damit diese Einstellung wirksam wird."
   },
   "options_tooltip_update": {
     "message": "Aktuallisiert die gecachten Bilder."

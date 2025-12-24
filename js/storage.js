@@ -32,6 +32,7 @@ async function loadConfig() {
     discoverCat: "8",           // comma separated ids of the categories (in case discover is not set to  gallery') in case of all value is "0"
     interval: 60,               // interval when to update the cache automatically to shpw the next 10 pictures
     random: false,              // show a random picture from the cache or in order as they are loaded
+    keepLastTab: false,         // automatically reopen newtab if last tab is closed
     img: [],                    // list of cached images {data, url, author, link}
     imgUrl: [],                 // list of pictures {url, author, link} received from 500px.com
     imgUrlPos: 0,               // position of the images already loaded form imgUrl list into the cache

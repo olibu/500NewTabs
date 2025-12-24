@@ -13,6 +13,7 @@ async function save_options() {
   var name = document.getElementById('name').value;
   var interval = parseInt(document.getElementById('interval').value);
   var random = document.getElementById('random').checked;
+  var keepLastTab = document.getElementById('keepLastTab').checked;
 
   // check if custom gallery URL has changed to load id and slug
   let gallery = {
@@ -40,6 +41,7 @@ async function save_options() {
     name: name,
     interval: interval,
     random: random, 
+    keepLastTab: keepLastTab, 
   });
   // Update status to let user know options were saved.
   await updateCache(true, true);
@@ -112,6 +114,7 @@ async function restore_options() {
   document.getElementById('cgalleryurl').value = config.cGalleryUrl;
   document.getElementById('interval').value = config.interval;
   document.getElementById('random').checked = config.random;
+  document.getElementById('keepLastTab').checked = config.keepLastTab;
   updateCategory();
 
 }

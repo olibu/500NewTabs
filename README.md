@@ -127,21 +127,38 @@ Gallery query:
   }"
 }
 ```
+# Development Information
 
-## Release Information
+## Firefox Console
+
+Open the debug console in Firefox with <Crtl><Shift><J>.
+
+## Testing of unsigned extensions
+
+open [debug extension](about:debugging#/runtine/this-firefox) and "load temporary add-on".
+
+## Mozilla Account Information
+
+The information for signing are stored in the .env file. Just copy the template and insert your account details.
+
+API key is managed at [API Key](https://addons.mozilla.org/de/developers/addon/api/key/)
+
+
+# Release Information
 
 Detailed information about the releases can be found [here](https://github.com/olibu/500NewTabs/releases)
 
-## Future Features
+
+# Future Features
 
 * sync the configuration in the user profile
 * show local image in case of missing local storage
 
 
-## Disclaimer
+# Disclaimer
 
 This extension is not affiliated with Goolge, 500px.com or any other pice of software mentioned at this site. It may stop working as soon as the backend API from the 500px web page changes.
 
-## License
+# License
 
 500NewTabs is licensed under the [MIT License](https://tldrlegal.com/l/mit)
