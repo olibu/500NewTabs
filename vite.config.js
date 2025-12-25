@@ -28,9 +28,6 @@ function generateManifest() {
     chrome_url_overrides: {
       newtab: "newtab.html"
     },
-    chrome_settings_overrides : {
-      "homepage": "newtab.html"
-    },
     host_permissions: [
       "https://api.500px.com/*",
       "https://drscdn.500px.org/*"
@@ -48,9 +45,11 @@ function generateManifest() {
     manifest["browser_specific_settings"] = {
       gecko: { id: "500newtabs@olibu.com" }
     };
+    manifest.chrome_settings_overrides = {
+      homepage: "newtab.html"
+    };
   }
   else {
-    manifest.requires_payment = false;
     manifest.update_url = "https://clients2.google.com/service/update2/crx";
     manifest.offline_enabled = true;
   }
