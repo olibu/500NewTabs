@@ -1,0 +1,12 @@
+{
+  "app": "500NewTabs",
+  "summary": {
+    "en-US": "New tab with images from 500px.com"
+  },
+  "categories": [
+    "tabs"
+  ],
+  "version": {
+    "license": "MIT"
+  }
+}

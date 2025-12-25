@@ -12,7 +12,7 @@
     "test_ff": "cross-env TARGET=firefox vite build && web-ext --source-dir=dist run",
     "build_ff": "cross-env TARGET=firefox vite build && web-ext --overwrite-dest --source-dir=dist build",
     "sign_test_ff": "dotenv -- web-ext sign --source-dir=dist --channel=unlisted",
-    "sign_ff": "dotenv -- web-ext sign --source-dir=dist --channel=listed"
+    "sign_ff": "dotenv -- web-ext sign --source-dir=dist --channel=listed --amo-metadata=./amo-metadata.json"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.16",
