@@ -43,7 +43,12 @@ function generateManifest() {
       type: "module"
     };
     manifest["browser_specific_settings"] = {
-      gecko: { id: "500newtabs@olibu.com" }
+      gecko: { 
+        id: "500newtabs@olibu.com",
+        data_collection_permissions: {
+          required: ["none"]
+        }
+      }
     };
     manifest.chrome_settings_overrides = {
       homepage: "newtab.html"
