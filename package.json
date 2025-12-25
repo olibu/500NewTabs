@@ -1,7 +1,7 @@
 {
   "name": "500-new-tabs-build",
   "private": true,
-  "version": "1.8.0",
+  "version": "1.8.1",
   "type": "module",
   "scripts": {
     "start": "vite build --sourcemap",
@@ -11,7 +11,8 @@
     "coverage": "vitest run --coverage",
     "test_ff": "cross-env TARGET=firefox vite build && web-ext --source-dir=dist run",
     "build_ff": "cross-env TARGET=firefox vite build && web-ext --overwrite-dest --source-dir=dist build",
-    "sign_ff": "dotenv -- web-ext sign --source-dir=dist --channel=unlisted"
+    "sign_test_ff": "dotenv -- web-ext sign --source-dir=dist --channel=unlisted",
+    "sign_ff": "dotenv -- web-ext sign --source-dir=dist --channel=listed"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.16",
