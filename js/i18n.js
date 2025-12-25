@@ -6,7 +6,7 @@
     if (toTranslate) {
       for (let i = 0, l = toTranslate.length; i < l; i++) {
         let element = toTranslate[i];
-        element.innerHTML = translate(element.dataset.i18n);
+        element.innerText = translate(element.dataset.i18n);
       }
     }
     // replace attributes

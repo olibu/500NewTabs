@@ -132,7 +132,7 @@ function addCategory() {
   for (let i = 0; i < tmpAry.length; i++) {
     var opt = document.createElement('option');
     opt.value = tmpAry[i][1];
-    opt.innerHTML = tmpAry[i][0];
+    opt.innerText = tmpAry[i][0];
     selElem.appendChild(opt);
   }
 }

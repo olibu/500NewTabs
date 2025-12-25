@@ -40,7 +40,7 @@ async function setBackgroundImage() {
 
     // show the background image
     backgroundField.style.background = 'url(' + config.img[config.lastPos].data + ')';
-    authorField.innerHTML = '&copy; ' + config.img[config.lastPos].author;
+    authorField.innerText = '© ' + config.img[config.lastPos].author;
     authorField.href = 'https://500px.com' + config.img[config.lastPos].link;
 
     // store the current properties in the local store for the next new tab
@@ -63,7 +63,7 @@ async function setBackgroundImage() {
     // console.log('using fallback image');
     const imgUrl = new URL('../img/bg.jpeg', import.meta.url).href
     backgroundField.style.background = 'url(' + imgUrl + ')';
-    authorField.innerHTML = '&copy; olibu';
+    authorField.innerText = '© olibu';
     authorField.href = 'https://500px.com/photo/1059193515/bookshelfs-in-the-abbey-of-neustift-by-olibu';
 
     // special behavior for first time
