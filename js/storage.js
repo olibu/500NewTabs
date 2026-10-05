@@ -98,6 +98,7 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       saveConfig(config);
     } catch (e) {
       console.log('Not possible to update image URL list', e);
+      throw e;
     }
   }
 
@@ -154,90 +155,71 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
 async function getImages(useCursor) {
   const images = [];
   
+  let excludeNsfw = true;
+  if (config.safemode) {
+    excludeNsfw = true;
+  } else {
+    excludeNsfw = false;
+  }
+
+  let galleryId = "TVF4RQHOYEp";
+
+  if (config.discover == 'cgallery' && config.cGalleryId) {
+    console.log('Using custom gallery ID:', config.cGalleryId);
+    galleryId = config.cGalleryId;
+  }
+
   // define the query for the gallery
-  let query =
-    '{ "operationName":"GalleriesDetailQueryRendererQuery","variables":{ "ownerLegacyId":"1006727773","slug":"500NewTabs","token":null,"pageSize":10,"showNude":true }, "query":"query GalleriesDetailQueryRendererQuery( $ownerLegacyId: String, $slug: String, $token: String, $pageSize: Int, $showNude: Boolean ) { gallery: galleryByOwnerIdAndSlugOrToken(ownerLegacyId: $ownerLegacyId, slug: $slug, token: $token) { ...GalleriesDetailPaginationContainer_gallery_15zZXN id } } fragment GalleriesDetailPaginationContainer_gallery_15zZXN on Gallery { id legacyId photos(first: $pageSize, showNude: $showNude) { totalCount edges { cursor node { id legacyId canonicalPath notSafeForWork photographer: uploader { id legacyId username displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }';
+  let query = `{"operationName":"PageGalleryItems","variables":{"after":null,"first":${MAX_IMAGES},"galleryId":"${galleryId}","excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query PageGalleryItems($galleryId: ID!, $first: Int!, $after: String, $excludeNsfw: Boolean) { pageGalleryItems( galleryId: $galleryId    first: $first   after: $after   excludeNsfw: $excludeNsfw ) { edges { node { ... on Photo { id   uploader {displayName}   urls { size_4k   size_2048 } } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
+
+
+  // console.log("query", query);
 
   // in case of available cursor, use the cursor query
   if (useCursor) {
-    // console.log(options.cursor);
+    console.log("Cursor", config.cursor);
     if (config.cursor) {
       query =
-      `{ "operationName":"GalleriesDetailPaginationContainerQuery","variables":{ "cursor": "${config.cursor}", "ownerLegacyId":"1006727773","slug":"500NewTabs","token":null,"pageSize":10,"showNude":true }, "query":"query GalleriesDetailPaginationContainerQuery( $cursor: String, $ownerLegacyId: String, $slug: String, $token: String, $pageSize: Int, $showNude: Boolean ) { gallery: galleryByOwnerIdAndSlugOrToken(ownerLegacyId: $ownerLegacyId, slug: $slug, token: $token) { ...GalleriesDetailPaginationContainer_gallery_15zZXN id } } fragment GalleriesDetailPaginationContainer_gallery_15zZXN on Gallery { id legacyId photos(first: $pageSize, after: $cursor, showNude: $showNude) { totalCount edges { cursor node { id legacyId canonicalPath notSafeForWork photographer: uploader { id legacyId username displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }`;
+      `{"operationName":"PageGalleryItems","variables":{"after":"${config.cursor}","first":${MAX_IMAGES},"galleryId":"${galleryId}","excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query PageGalleryItems($galleryId: ID!, $first: Int!, $after: String, $excludeNsfw: Boolean) { pageGalleryItems( galleryId: $galleryId    first: $first   after: $after   excludeNsfw: $excludeNsfw ) { edges { node { ... on Photo { id   uploader {displayName}   urls { size_4k   size_2048 } } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
     }
   }
 
-  if (config.discover == 'cgallery') {
-    query =
-    `{ "operationName":"GalleriesDetailQueryRendererQuery","variables":{ "ownerLegacyId":"${config.cGalleryId}","slug":"${config.cGallerySlug}","token":null,"pageSize":10,"showNude":true }, "query":"query GalleriesDetailQueryRendererQuery( $ownerLegacyId: String, $slug: String, $token: String, $pageSize: Int, $showNude: Boolean ) { gallery: galleryByOwnerIdAndSlugOrToken(ownerLegacyId: $ownerLegacyId, slug: $slug, token: $token) { ...GalleriesDetailPaginationContainer_gallery_15zZXN id } } fragment GalleriesDetailPaginationContainer_gallery_15zZXN on Gallery { id legacyId photos(first: $pageSize, showNude: $showNude) { totalCount edges { cursor node { id legacyId canonicalPath notSafeForWork photographer: uploader { id legacyId username displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }`;
+  let result, res;
+  try {
+    res = await fetch('https://api-neo.500px.com/graphql', {
+      headers: {
+        'content-type': 'application/json',
+        'Cookie': 'x-500px-device-id-prod=814922a3-e96f-576c-gf8c-c53b6c54c932'
+      },
+      referrer: 'https://500px.com/',
+      body: query,
+      method: 'POST',
+      credentials: 'omit',
+    });
 
-    // in case of available cursor, use the cursor query
-    if (useCursor) {
-      // console.log(options.cursor);
-      if (config.cursor) {
-        query =
-        `{ "operationName":"GalleriesDetailPaginationContainerQuery","variables":{ "cursor": "${config.cursor}", "ownerLegacyId":"${config.cGalleryId}","slug":"${config.cGallerySlug}","token":null,"pageSize":10,"showNude":true }, "query":"query GalleriesDetailPaginationContainerQuery( $cursor: String, $ownerLegacyId: String, $slug: String, $token: String, $pageSize: Int, $showNude: Boolean ) { gallery: galleryByOwnerIdAndSlugOrToken(ownerLegacyId: $ownerLegacyId, slug: $slug, token: $token) { ...GalleriesDetailPaginationContainer_gallery_15zZXN id } } fragment GalleriesDetailPaginationContainer_gallery_15zZXN on Gallery { id legacyId photos(first: $pageSize, after: $cursor, showNude: $showNude) { totalCount edges { cursor node { id legacyId canonicalPath notSafeForWork photographer: uploader { id legacyId username displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }`;
-      }
-    }
+    result = await res.text();
+    result = JSON.parse(result);
+  } catch (error) {
+    console.error("Failed to fetch or parse JSON", result);
+    console.error("Query", query);
+    throw new Error('Could not load images.');
   }
-
-    // redefine the query in case of any other discovery option
-  if (config.discover != 'gallery' && config.discover != 'cgallery') {
-    let feature ='';
-    if (config.discover !== '') {
-      feature = `{ "key":"FEATURE_NAME", "value":"${config.discover}" }, `
-    }
-    let category = '';
-    if (config.discoverCat !== "0") {
-      category = `{ "key":"CATEGORY", "value":"${config.discoverCat}" }, `
-    }
-    query =
-      `{ "operationName": "DiscoverQueryRendererQuery", "variables": { "filters": [ ${feature} ${category} { "key":"FOLLOWERS_COUNT", "value":"gte:1" } ], "sort":"POPULAR_PULSE" }, "query":"query DiscoverQueryRendererQuery($filters: [PhotoDiscoverSearchFilter!], $sort: PhotoDiscoverSort) {...DiscoverPaginationContainer_query_1OEZSy } fragment DiscoverPaginationContainer_query_1OEZSy on Query { photos: photoDiscoverSearch(first: 100, filters: $filters, sort: $sort) { edges { node { canonicalPath notSafeForWork photographer: uploader { displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }`;
-
-    if (useCursor) {
-      // console.log(options.cursor);
-      if (config.cursor) {
-        query =
-        `{ "operationName": "DiscoverPaginationContainerQuery", "variables": { "cursor": "${config.cursor}", "filters": [ ${feature} ${category} { "key":"FOLLOWERS_COUNT", "value":"gte:1" } ], "sort":"POPULAR_PULSE" }, "query":"query DiscoverPaginationContainerQuery($cursor: String, $filters: [PhotoDiscoverSearchFilter!], $sort: PhotoDiscoverSort) {...DiscoverPaginationContainer_query_1OEZSy } fragment DiscoverPaginationContainer_query_1OEZSy on Query { photos: photoDiscoverSearch(first: 100, after: $cursor, filters: $filters, sort: $sort) { edges { node { canonicalPath notSafeForWork photographer: uploader { displayName } images(sizes: [35]) { size jpegUrl } } } pageInfo { endCursor hasNextPage } } }" }`;
-      }
-    }
-    
-  }
-
-  const res = await fetch('https://api.500px.com/graphql', {
-    headers: {
-      'content-type': 'application/json',
-    },
-    referrer: 'https://500px.com/',
-    body: query,
-    method: 'POST',
-    credentials: 'omit',
-  });
-  const result = await res.json();
+  
   // console.log(JSON.stringify( result, ' ', 2));
+  
   let nodes;
   let piCursor;
   let hasNextPage = false;
-  if (config.discover === 'gallery' || config.discover === 'cgallery') {
-    if (result.data.gallery.photos) {
-      nodes = result.data.gallery.photos.edges;
-      if (result.data.gallery.photos.pageInfo && result.data.gallery.photos.pageInfo.endCursor) {
-        piCursor = result.data.gallery.photos.pageInfo.endCursor;
-        hasNextPage = result.data.gallery.photos.pageInfo.hasNextPage;
-      }
-    }
-  } else {
-    if (result.data.photos) {
-      nodes = result.data.photos.edges;
-      if (result.data.photos.pageInfo && result.data.photos.pageInfo.endCursor) {
-        piCursor = result.data.photos.pageInfo.endCursor;
-        hasNextPage = result.data.photos.pageInfo.hasNextPage;
-      }
+  if (result.data && result.data.pageGalleryItems) {
+    nodes = result.data.pageGalleryItems.edges;
+    if (result.data.pageGalleryItems.pageInfo && result.data.pageGalleryItems.pageInfo.endCursor) {
+      piCursor = result.data.pageGalleryItems.pageInfo.endCursor;
+      hasNextPage = result.data.pageGalleryItems.pageInfo.hasNextPage;
     }
   }
 
   if (!nodes) {
-    console.log(query, result);
+    console.log("Bad query", query, result);
     throw new Error('Could not load images.')
   }
 
@@ -257,16 +239,9 @@ async function getImages(useCursor) {
   }
 
   for (let node of nodes) {
-    // ignore images which are "not safe"
-    if (config.safemode) {
-      if (node.node.notSafeForWork) {
-        console.log('ignoring image as of safe mode');
-        continue;
-      }
-    }
-    const url = node.node.images[0].jpegUrl;
-    const author = node.node.photographer.displayName;
-    const link = node.node.canonicalPath;
+    const url = node.node.urls.size_4k;
+    const author = node.node.uploader.displayName;
+    const link = "https://500px.com/photo/" + node.node.id;
     // console.log(url);
     if (!url) {
       throw new Error('jpegUrl not found in response');

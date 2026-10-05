@@ -41,7 +41,7 @@ async function setBackgroundImage() {
     // show the background image
     backgroundField.style.background = 'url(' + config.img[config.lastPos].data + ')';
     authorField.innerText = '© ' + config.img[config.lastPos].author;
-    authorField.href = 'https://500px.com' + config.img[config.lastPos].link;
+    authorField.href = config.img[config.lastPos].link;
 
     // store the current properties in the local store for the next new tab
     chrome.storage.local.set({

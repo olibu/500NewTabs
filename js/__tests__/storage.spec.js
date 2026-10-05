@@ -10,7 +10,16 @@ describe('getImages Testcases', async () => {
 
     const images = await getImages(false);
     const images2 = await getImages(false);
-    
+
+    expect(images).toStrictEqual(images2);
+  });
+
+  it('should getImages from 500px for custome gallery', async () => {
+    saveConfig({discover: 'cgallery', cGalleryId: "zwyJ0ohlKuy" });
+
+    const images = await getImages(false);
+    const images2 = await getImages(false);
+
     expect(images).toStrictEqual(images2);
   });
 

@@ -30,6 +30,8 @@ function generateManifest() {
     },
     host_permissions: [
       "https://api.500px.com/*",
+      "https://api-neo.500px.com/*",
+      "https://cdn-resize-prod-com.500px.cloud/*",
       "https://drscdn.500px.org/*"
     ],
     permissions: [ "storage", "tabs" , "unlimitedStorage" ],

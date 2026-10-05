@@ -78,55 +78,10 @@ Popular query:
 ```
 
 Gallery query:
+```json
+{"operationName":"PageGalleryItems","variables":{"after":null,"first":20,"galleryId":"zwyJ0ohlKuy","excludeNsfw":true},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query PageGalleryItems($galleryId: ID!, $first: Int!, $after: String, $excludeNsfw: Boolean) { pageGalleryItems( galleryId: $galleryId    first: $first   after: $after   excludeNsfw: $excludeNsfw ) { edges { node { ... on Photo { id   uploader {displayName}   urls { size_4k   size_2048 } } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}
 ```
-{
-  "operationName":"GalleriesDetailQueryRendererQuery","variables":{
-    "ownerLegacyId":"1006727773","slug":"500NewTabs","token":null,"pageSize":10,"showNude":true
-  },
-  "query":"query GalleriesDetailQueryRendererQuery(
-    $ownerLegacyId: String, 
-    $slug: String, 
-    $token: String, 
-    $pageSize: Int, 
-    $showNude: Boolean
-  ) {
-    gallery: galleryByOwnerIdAndSlugOrToken(ownerLegacyId: $ownerLegacyId, slug: $slug, token: $token) {
-      ...GalleriesDetailPaginationContainer_gallery_15zZXN
-      id
-    }
-  }
-  fragment GalleriesDetailPaginationContainer_gallery_15zZXN on Gallery {
-    id
-    legacyId
-    photos(first: $pageSize, showNude: $showNude) {
-      totalCount
-      edges {
-        cursor
-        node {
-          id
-          legacyId
-          canonicalPath
-          notSafeForWork
-          photographer: uploader {
-            id
-            legacyId
-            username
-            displayName
-          }
-          images(sizes: [35]) {
-            size
-            jpegUrl
-          }
-        }
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-    }
-  }"
-}
-```
+
 # Development Information
 
 ## Firefox Console

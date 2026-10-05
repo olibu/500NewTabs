@@ -219,10 +219,10 @@
     "message": "Eigene Gallerie"
   },
   "options_custom_gallery": {
-    "message": "Eigene Gallerie"
+    "message": "ID eigener Gallerie"
   },
   "options_tooltip_custom_gallery": {
-    "message": "URL der Gallerie. Wird beim Speichern geprüft."
+    "message": "ID der Gallerie."
   },
   "options_update_error_gallery_short": {
     "message": "Speichern fehlgeschlagen! Die URL der Gallerie is zu kurz."
@@ -232,6 +232,9 @@
   },
   "options_update_error_gallery_missing_galleries": {
     "message": "Speichern fehlgeschlagen! In der URL der Gallerie fehlt der Parameter '/galleries/'"
+  },
+  "options_missing_cgalleryid": {
+    "message": "Es wurde keine Gallerie-ID angegeben."
   },
   "options_update_error_gallery_userid": {
     "message": "Speichern fehlgeschlagen! Die Benutzerkennung '$1' konnte nicht gefunden werden."

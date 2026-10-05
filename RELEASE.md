@@ -1,4 +1,6 @@
 ### New Features:
-
+- Categories removed
+- Custom Galley changed to ID
+  
 ### Bugfixes:
-- Center the background for smaller windows
+- Update to new 500px API
