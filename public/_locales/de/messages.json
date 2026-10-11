@@ -221,6 +221,12 @@
   "options_discover_7": {
     "message": "Eigene Gallerie"
   },
+  "options_discover_8": {
+    "message": "Leaderboard Wöchentlich"
+  },
+  "options_discover_9": {
+    "message": "Leaderboard Monatlich"
+  },
   "options_custom_gallery": {
     "message": "ID eigener Gallerie"
   },

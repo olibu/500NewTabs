@@ -221,6 +221,12 @@
   "options_discover_7": {
     "message": "Custom Gallery"
   },
+  "options_discover_8": {
+    "message": "Leaderboard Weekly"
+  },
+  "options_discover_9": {
+    "message": "Leaderboard Monthly"
+  },
   "options_custom_gallery": {
     "message": "Custom Gallery ID"
   },

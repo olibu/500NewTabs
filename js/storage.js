@@ -169,25 +169,40 @@ async function getImages(useCursor) {
     excludeNsfw = false;
   }
 
-  let galleryId = "TVF4RQHOYEp";
+  let query;
 
-  if (config.discover == 'cgallery' && config.cGalleryId) {
-    console.log('Using custom gallery ID:', config.cGalleryId);
-    galleryId = config.cGalleryId;
-  }
+  if (config.discover && config.discover.startsWith('leaderboard')) {
+    // leaderboard modes: leaderboard_weekly, leaderboard_monthly
+    const type = config.discover.replace('leaderboard_', '').toUpperCase();
 
-  // define the query for the gallery
-  let query = `{"operationName":"PageGalleryItems","variables":{"after":null,"first":${MAX_IMAGES},"galleryId":"${galleryId}","excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query PageGalleryItems($galleryId: ID!, $first: Int!, $after: String, $excludeNsfw: Boolean) { pageGalleryItems( galleryId: $galleryId    first: $first   after: $after   excludeNsfw: $excludeNsfw ) { edges { node { ... on Photo { id   uploader {displayName}   urls { size_4k   size_2048 } } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
+    // define the query for the leaderboard
+    query = `{"operationName":"leaderboardHeroPhotos","variables":{"after":null,"first":${MAX_IMAGES},"type":"${type}"},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query leaderboardHeroPhotos($type: LeaderboardType!, $first: Int! = 50, $after: String) { leaderboardPage(type: $type, first: $first, after: $after) { edges { node { owner { displayName username } photo { id urls { size_1024 } isNsfw } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
 
+    // in case of available cursor, use the cursor query
+    if (useCursor) {
+      console.log("Cursor", config.cursor);
+      if (config.cursor) {
+        query = `{"operationName":"leaderboardHeroPhotos","variables":{"after":"${config.cursor}","first":${MAX_IMAGES},"type":"${type}"},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query leaderboardHeroPhotos($type: LeaderboardType!, $first: Int! = 50, $after: String) { leaderboardPage(type: $type, first: $first, after: $after) { edges { node { owner { displayName username } photo { id urls { size_1024 } isNsfw } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
+      }
+    }
+  } else {
+    let galleryId = "TVF4RQHOYEp";
 
-  // console.log("query", query);
+    if (config.discover == 'cgallery' && config.cGalleryId) {
+      console.log('Using custom gallery ID:', config.cGalleryId);
+      galleryId = config.cGalleryId;
+    }
 
-  // in case of available cursor, use the cursor query
-  if (useCursor) {
-    console.log("Cursor", config.cursor);
-    if (config.cursor) {
-      query =
-      `{"operationName":"PageGalleryItems","variables":{"after":"${config.cursor}","first":${MAX_IMAGES},"galleryId":"${galleryId}","excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query PageGalleryItems($galleryId: ID!, $first: Int!, $after: String, $excludeNsfw: Boolean) { pageGalleryItems( galleryId: $galleryId    first: $first   after: $after   excludeNsfw: $excludeNsfw ) { edges { node { ... on Photo { id   uploader {displayName}   urls { size_4k   size_2048 } } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
+    // define the query for the gallery
+    query = `{"operationName":"PageGalleryItems","variables":{"after":null,"first":${MAX_IMAGES},"galleryId":"${galleryId}","excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query PageGalleryItems($galleryId: ID!, $first: Int!, $after: String, $excludeNsfw: Boolean) { pageGalleryItems( galleryId: $galleryId    first: $first   after: $after   excludeNsfw: $excludeNsfw ) { edges { node { ... on Photo { id   uploader {displayName}   urls { size_4k   size_2048 } } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
+
+    // in case of available cursor, use the cursor query
+    if (useCursor) {
+      console.log("Cursor", config.cursor);
+      if (config.cursor) {
+        query =
+        `{"operationName":"PageGalleryItems","variables":{"after":"${config.cursor}","first":${MAX_IMAGES},"galleryId":"${galleryId}","excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query PageGalleryItems($galleryId: ID!, $first: Int!, $after: String, $excludeNsfw: Boolean) { pageGalleryItems( galleryId: $galleryId    first: $first   after: $after   excludeNsfw: $excludeNsfw ) { edges { node { ... on Photo { id   uploader {displayName}   urls { size_4k   size_2048 } } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
+      }
     }
   }
 
@@ -228,6 +243,12 @@ async function getImages(useCursor) {
       piCursor = result.data.pageGalleryItems.pageInfo.endCursor;
       hasNextPage = result.data.pageGalleryItems.pageInfo.hasNextPage;
     }
+  } else if (result.data && result.data.leaderboardPage) {
+    nodes = result.data.leaderboardPage.edges;
+    if (result.data.leaderboardPage.pageInfo && result.data.leaderboardPage.pageInfo.endCursor) {
+      piCursor = result.data.leaderboardPage.pageInfo.endCursor;
+      hasNextPage = result.data.leaderboardPage.pageInfo.hasNextPage;
+    }
   }
 
   if (!nodes) {
@@ -238,22 +259,31 @@ async function getImages(useCursor) {
   // get the cursor and save it for the next query
   if (piCursor) {
     // console.log(piCursor);
-    if (hasNextPage) {
-      config.cursor = piCursor
-    }
-    else {
-      config.cursor = false;
-    }
+    config.cursor = hasNextPage ? piCursor : false;
     //save cursor
     saveConfig({
-      cursor: piCursor,
+      cursor: config.cursor,
     });
   }
 
   for (let node of nodes) {
-    const url = node.node.urls.size_4k;
-    const author = node.node.uploader.displayName;
-    const link = "https://500px.com/photo/" + node.node.id;
+    const item = node.node;
+    let url, author, link;
+
+    if (item.photo) {
+      // leaderboard item; skip nsfw images in safemode
+      if (excludeNsfw && item.photo.isNsfw) {
+        continue;
+      }
+      url = item.photo.urls.size_1024;
+      author = item.owner.displayName;
+      link = "https://500px.com/photo/" + item.photo.id;
+    } else {
+      url = item.urls.size_4k;
+      author = item.uploader.displayName;
+      link = "https://500px.com/photo/" + item.id;
+    }
+
     // console.log(url);
     if (!url) {
       throw new Error('jpegUrl not found in response');

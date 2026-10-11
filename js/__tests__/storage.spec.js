@@ -184,3 +184,94 @@ describe('getImages permission handling', () => {
     await expect(getImages(false)).rejects.toThrow('Could not load images.');
   });
 })
+
+describe('getImages leaderboard', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  function stubLeaderboardResponse(pageInfo = { endCursor: 'cG9zLTE=', hasNextPage: true, hasPreviousPage: false }) {
+    const fetchMock = vi.fn().mockResolvedValue({
+      text: () => Promise.resolve(JSON.stringify({
+        data: {
+          leaderboardPage: {
+            edges: [
+              {
+                node: {
+                  owner: { displayName: 'Torsten S', username: 'tsacher' },
+                  photo: { id: 'abc123', urls: { size_1024: 'https://cdn.example/1024.jpg' }, isNsfw: false },
+                },
+              },
+              {
+                node: {
+                  owner: { displayName: 'Some One', username: 'someone' },
+                  photo: { id: 'nsfw1', urls: { size_1024: 'https://cdn.example/nsfw.jpg' }, isNsfw: true },
+                },
+              },
+            ],
+            pageInfo,
+          },
+        },
+      })),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    return fetchMock;
+  }
+
+  it('should query the leaderboard and map the type from the discover option', async () => {
+    saveConfig({ discover: 'leaderboard_monthly', safemode: false });
+    const fetchMock = stubLeaderboardResponse();
+
+    const images = await getImages(false);
+
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+    expect(body.operationName).toBe('leaderboardHeroPhotos');
+    expect(body.variables.type).toBe('MONTHLY');
+    expect(body.variables.after).toBe(null);
+    expect(images).toStrictEqual([
+      { url: 'https://cdn.example/1024.jpg', author: 'Torsten S', link: 'https://500px.com/photo/abc123' },
+      { url: 'https://cdn.example/nsfw.jpg', author: 'Some One', link: 'https://500px.com/photo/nsfw1' },
+    ]);
+  });
+
+  it('should filter nsfw leaderboard images when safemode is active', async () => {
+    saveConfig({ discover: 'leaderboard_weekly', safemode: true });
+    const fetchMock = stubLeaderboardResponse();
+
+    const images = await getImages(false);
+
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).variables.type).toBe('WEEKLY');
+    expect(images).toStrictEqual([
+      { url: 'https://cdn.example/1024.jpg', author: 'Torsten S', link: 'https://500px.com/photo/abc123' },
+    ]);
+  });
+
+  it('should use the saved cursor for the next leaderboard query', async () => {
+    saveConfig({ discover: 'leaderboard_weekly', cursor: 'cG9zLTE=' });
+    const fetchMock = stubLeaderboardResponse();
+
+    await getImages(true);
+
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).variables.after).toBe('cG9zLTE=');
+  });
+
+  it('should save the cursor from the leaderboard pageInfo', async () => {
+    const config = getConfig();
+    saveConfig({ discover: 'leaderboard_weekly', cursor: false });
+    stubLeaderboardResponse({ endCursor: 'cG9zLTM=', hasNextPage: true, hasPreviousPage: false });
+
+    await getImages(false);
+
+    expect(config.cursor).toBe('cG9zLTM=');
+  });
+
+  it('should clear the cursor when the leaderboard has no next page', async () => {
+    const config = getConfig();
+    saveConfig({ discover: 'leaderboard_weekly', cursor: 'cG9zLTM=' });
+    stubLeaderboardResponse({ endCursor: 'cG9zLTM=', hasNextPage: false, hasPreviousPage: true });
+
+    await getImages(true);
+
+    expect(config.cursor).toBe(false);
+  });
+})

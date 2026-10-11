@@ -155,18 +155,10 @@ async function update_cache() {
 }
 
 function updateCategory() {
-  const discover = document.getElementById('discover');
-  const cgalleryid = document.getElementById('cgalleryid'); 
+  const discover = document.getElementById('discover').value;
+  const cgalleryid = document.getElementById('cgalleryid');
 
-  if (discover.options[0].selected) {
-    cgalleryid.disabled = true;
-  }
-  else if (discover.options[1].selected) {
-    cgalleryid.disabled = false;
-  }
-  else {
-    cgalleryid.disabled = true;
-  }
+  cgalleryid.disabled = (discover !== 'cgallery');
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
