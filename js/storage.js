@@ -1,4 +1,5 @@
 import { getImage } from './utils.js';
+import { hasHostPermissions, isPermissionError, PermissionError } from './permissions.js';
 
 const MAX_IMAGES = 10;
 
@@ -111,6 +112,9 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
       config.imgUrl.push(...images);
     } catch (e) {
       console.log('Not possible to update image URL list with further images', e);
+      if (isPermissionError(e)) {
+        throw e;
+      }
     }
   }
 
@@ -148,6 +152,9 @@ async function updateCache(forceUpdate = false, forceUrlUpdate = false) {
     
   } catch (e) {
     console.log('Not possible to update cache', e);
+    if (isPermissionError(e)) {
+      throw e;
+    }
   }
 }
 
@@ -202,6 +209,11 @@ async function getImages(useCursor) {
   } catch (error) {
     console.error("Failed to fetch or parse JSON", result);
     console.error("Query", query);
+    // a blocked request due to missing host permission and a network failure
+    // look the same, so check the actual permission state to distinguish them
+    if (!(await hasHostPermissions())) {
+      throw new PermissionError('Missing host permission for the 500px API');
+    }
     throw new Error('Could not load images.');
   }
   

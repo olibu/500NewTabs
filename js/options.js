@@ -1,4 +1,5 @@
 import { loadConfig, config, updateCache, saveConfig } from '@/storage.js';
+import { isPermissionError, requestHostPermissions } from '@/permissions.js';
 
 // Saves options to chrome.storage
 async function save_options() {
@@ -34,10 +35,17 @@ async function save_options() {
     keepLastTab: keepLastTab, 
   });
   // Update status to let user know options were saved.
+  // in Firefox the host permissions may not be granted, ask for them within
+  // the user action before the update runs (no-op if already granted)
+  await requestHostPermissions();
   try {
     await updateCache(true, true);
   } catch (e) {
-    showStatus(chrome.i18n.getMessage('options_update_error'));
+    if (isPermissionError(e)) {
+      showStatus(chrome.i18n.getMessage('options_update_permission_error'));
+    } else {
+      showStatus(chrome.i18n.getMessage('options_update_error'));
+    }
   }
   document.getElementById('save').classList.remove('is-loading');
 }
@@ -131,10 +139,17 @@ function addCategory() {
 // update the image cache
 async function update_cache() {
   document.getElementById('update').classList.add('is-loading');
+  // in Firefox the host permissions may not be granted, ask for them within
+  // the user action before the update runs (no-op if already granted)
+  await requestHostPermissions();
   try {
     await updateCache(true, true);
   } catch (e) {
-    showStatus(chrome.i18n.getMessage('options_update_error'));
+    if (isPermissionError(e)) {
+      showStatus(chrome.i18n.getMessage('options_update_permission_error'));
+    } else {
+      showStatus(chrome.i18n.getMessage('options_update_error'));
+    }
   }
   document.getElementById('update').classList.remove('is-loading');
 }

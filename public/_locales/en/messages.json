@@ -56,6 +56,9 @@
   "options_update_error": {
     "message": "Cache update failed!"
   },
+  "options_update_permission_error": {
+    "message": "Missing permission to access 500px. Please allow access and try again."
+  },
   "options_discover_1": {
     "message": "Gallery 500NewTabs"
   },

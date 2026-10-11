@@ -1,6 +1,5 @@
 ### New Features:
-- Categories removed
-- Custom Galley changed to ID
+- Permission handling in Firefox
   
 ### Bugfixes:
-- Update to new 500px API
+

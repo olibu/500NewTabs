@@ -1,5 +1,6 @@
 import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';
 import { getImages, loadConfig, saveConfig, updateCache, getConfig } from '../storage.js';
+import { PermissionError } from '../permissions.js';
 
 loadConfig();
 
@@ -153,4 +154,33 @@ describe('updateCache Testcases', async () => {
     expect(config.imgUrlPos).toBe(1);
   });
 
+})
+
+describe('getImages permission handling', () => {
+  const contains = vi.fn();
+
+  beforeEach(() => {
+    globalThis.browser = { permissions: { contains, request: vi.fn() } };
+  });
+
+  afterEach(() => {
+    delete globalThis.browser;
+    vi.unstubAllGlobals();
+  });
+
+  it('should throw PermissionError when fetch fails and permission is missing', async () => {
+    saveConfig({ discover: 'gallery' });
+    contains.mockResolvedValue(false);
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('NetworkError')));
+
+    await expect(getImages(false)).rejects.toBeInstanceOf(PermissionError);
+  });
+
+  it('should throw generic error when fetch fails but permission is granted', async () => {
+    saveConfig({ discover: 'gallery' });
+    contains.mockResolvedValue(true);
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('NetworkError')));
+
+    await expect(getImages(false)).rejects.toThrow('Could not load images.');
+  });
 })

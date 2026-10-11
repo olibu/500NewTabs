@@ -1,4 +1,5 @@
 import { loadConfig, config, updateCache } from '@/storage.js';
+import { isPermissionError, requestHostPermissions } from '@/permissions.js';
 
 let isWaiting = false;
 
@@ -123,6 +124,7 @@ function padLeft(num) {
 // and show the first image
 async function renew() {
   spinOn(document.getElementById('renew'));
+  await requestHostPermissions();
   await updateCache(true);
   setBackgroundImage();
   spinOff(document.getElementById('renew'));

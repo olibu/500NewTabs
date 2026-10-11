@@ -56,6 +56,9 @@
   "options_update_error": {
     "message": "Cache konnte nicht aktuallisiert werden!"
   },
+  "options_update_permission_error": {
+    "message": "Fehlende Berechtigung für 500px. Bitte Zugriff erlauben und erneut versuchen."
+  },
   "options_discover_1": {
     "message": "Gallerie 500NewTabs"
   },
