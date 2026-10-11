@@ -176,13 +176,13 @@ async function getImages(useCursor) {
     const type = config.discover.replace('leaderboard_', '').toUpperCase();
 
     // define the query for the leaderboard
-    query = `{"operationName":"leaderboardHeroPhotos","variables":{"after":null,"first":${MAX_IMAGES},"type":"${type}"},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query leaderboardHeroPhotos($type: LeaderboardType!, $first: Int! = 50, $after: String) { leaderboardPage(type: $type, first: $first, after: $after) { edges { node { owner { displayName username } photo { id urls { size_1024 } isNsfw } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
+    query = `{"operationName":"leaderboardHeroPhotos","variables":{"after":null,"first":${MAX_IMAGES},"type":"${type}","excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query leaderboardHeroPhotos($type: LeaderboardType!, $first: Int! = 50, $after: String, $excludeNsfw: Boolean) { leaderboardPage(type: $type, first: $first, after: $after, excludeNsfw: $excludeNsfw) { edges { node { owner { displayName username } photo { id urls { size_1024 } isNsfw } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
 
     // in case of available cursor, use the cursor query
     if (useCursor) {
       console.log("Cursor", config.cursor);
       if (config.cursor) {
-        query = `{"operationName":"leaderboardHeroPhotos","variables":{"after":"${config.cursor}","first":${MAX_IMAGES},"type":"${type}"},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query leaderboardHeroPhotos($type: LeaderboardType!, $first: Int! = 50, $after: String) { leaderboardPage(type: $type, first: $first, after: $after) { edges { node { owner { displayName username } photo { id urls { size_1024 } isNsfw } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
+        query = `{"operationName":"leaderboardHeroPhotos","variables":{"after":"${config.cursor}","first":${MAX_IMAGES},"type":"${type}","excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query leaderboardHeroPhotos($type: LeaderboardType!, $first: Int! = 50, $after: String, $excludeNsfw: Boolean) { leaderboardPage(type: $type, first: $first, after: $after, excludeNsfw: $excludeNsfw) { edges { node { owner { displayName username } photo { id urls { size_1024 } isNsfw } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
       }
     }
   } else {
@@ -271,10 +271,7 @@ async function getImages(useCursor) {
     let url, author, link;
 
     if (item.photo) {
-      // leaderboard item; skip nsfw images in safemode
-      if (excludeNsfw && item.photo.isNsfw) {
-        continue;
-      }
+      // leaderboard item
       url = item.photo.urls.size_1024;
       author = item.owner.displayName;
       link = "https://500px.com/photo/" + item.photo.id;

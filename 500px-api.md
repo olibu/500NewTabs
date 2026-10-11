@@ -76,5 +76,5 @@ response
 
 Used query
 ```json
-{"operationName":"leaderboardHeroPhotos","variables":{"after":null,"first":${MAX_IMAGES},"type":"${leaderboardType}"},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query leaderboardHeroPhotos($type: LeaderboardType!, $first: Int! = 50, $after: String) { leaderboardPage(type: $type, first: $first, after: $after) { edges { node { owner { displayName username } photo { id urls { size_1024 } isNsfw } } } pageInfo { endCursor hasNextPage hasPreviousPage } } }"}
+{"operationName":"leaderboardHeroPhotos","variables":{"after":null,"first":${MAX_IMAGES},"type":"${leaderboardType}","excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query leaderboardHeroPhotos($type: LeaderboardType!, $first: Int! = 50, $after: String, $excludeNsfw: Boolean) { leaderboardPage(type: $type, first: $first, after: $after, excludeNsfw: $excludeNsfw) { edges { node { owner { displayName username } photo { id urls { size_1024 } isNsfw } } } pageInfo { endCursor hasNextPage hasPreviousPage } } }"}
 ```

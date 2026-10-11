@@ -228,22 +228,20 @@ describe('getImages leaderboard', () => {
     expect(body.operationName).toBe('leaderboardHeroPhotos');
     expect(body.variables.type).toBe('MONTHLY');
     expect(body.variables.after).toBe(null);
+    expect(body.variables.excludeNsfw).toBe(false);
     expect(images).toStrictEqual([
       { url: 'https://cdn.example/1024.jpg', author: 'Torsten S', link: 'https://500px.com/photo/abc123' },
       { url: 'https://cdn.example/nsfw.jpg', author: 'Some One', link: 'https://500px.com/photo/nsfw1' },
     ]);
   });
 
-  it('should filter nsfw leaderboard images when safemode is active', async () => {
+  it('should request server-side nsfw filtering when safemode is active', async () => {
     saveConfig({ discover: 'leaderboard_weekly', safemode: true });
     const fetchMock = stubLeaderboardResponse();
 
-    const images = await getImages(false);
+    await getImages(false);
 
-    expect(JSON.parse(fetchMock.mock.calls[0][1].body).variables.type).toBe('WEEKLY');
-    expect(images).toStrictEqual([
-      { url: 'https://cdn.example/1024.jpg', author: 'Torsten S', link: 'https://500px.com/photo/abc123' },
-    ]);
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).variables.excludeNsfw).toBe(true);
   });
 
   it('should use the saved cursor for the next leaderboard query', async () => {
