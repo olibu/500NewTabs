@@ -227,6 +227,39 @@
   "options_discover_9": {
     "message": "Leaderboard Monatlich"
   },
+  "options_discover_10": {
+    "message": "Editors' Choice"
+  },
+  "options_editors_categories": {
+    "message": "Kategorien"
+  },
+  "options_tooltip_editors_categories": {
+    "message": "Nur Bilder aus den ausgewählten Kategorien anzeigen. \nWenn keine ausgewählt ist, werden alle Kategorien angezeigt.\nNur im Modus \"Editors' Choice\" verfügbar."
+  },
+  "options_editors_cat_landscape": {
+    "message": "Landschaft"
+  },
+  "options_editors_cat_city": {
+    "message": "Stadt"
+  },
+  "options_editors_cat_people": {
+    "message": "Menschen"
+  },
+  "options_editors_cat_events": {
+    "message": "Ereignisse"
+  },
+  "options_editors_cat_still_life": {
+    "message": "Stillleben"
+  },
+  "options_editors_cat_nature": {
+    "message": "Natur"
+  },
+  "options_editors_cat_sports": {
+    "message": "Sport"
+  },
+  "options_editors_cat_creative": {
+    "message": "Kreativ"
+  },
   "options_custom_gallery": {
     "message": "ID eigener Gallerie"
   },

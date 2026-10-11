@@ -273,3 +273,99 @@ describe('getImages leaderboard', () => {
     expect(config.cursor).toBe(false);
   });
 })
+
+describe('getImages editors choice', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  function stubEditorsResponse(pageInfo = { endCursor: 'Y3Vyc29yMQ==', hasNextPage: true, hasPreviousPage: false }) {
+    const fetchMock = vi.fn().mockResolvedValue({
+      text: () => Promise.resolve(JSON.stringify({
+        data: {
+          editorsChoices: {
+            edges: [
+              {
+                node: {
+                  resource: {
+                    id: 'abc123',
+                    urls: { size_4k: 'https://cdn.example/4k.jpg', size_2048: 'https://cdn.example/2048.jpg' },
+                    uploader: { displayName: 'Torsten S' },
+                  },
+                },
+              },
+            ],
+            pageInfo,
+          },
+        },
+      })),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    return fetchMock;
+  }
+
+  it('should query the editors choice and map the selected categories', async () => {
+    saveConfig({ discover: 'editors_choice', safemode: false, editorsCat: 'landscape,city' });
+    const fetchMock = stubEditorsResponse();
+
+    const images = await getImages(false);
+
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+    expect(body.operationName).toBe('editorsChoices');
+    expect(body.variables.first).toBe(10);
+    expect(body.variables.after).toBe(null);
+    expect(body.variables.categories).toStrictEqual(['landscape', 'city']);
+    expect(body.variables.excludeNsfw).toBe(false);
+    expect(images).toStrictEqual([
+      { url: 'https://cdn.example/4k.jpg', author: 'Torsten S', link: 'https://500px.com/photo/abc123' },
+    ]);
+  });
+
+  it('should omit the categories variable when none is selected', async () => {
+    saveConfig({ discover: 'editors_choice', editorsCat: '' });
+    const fetchMock = stubEditorsResponse();
+
+    await getImages(false);
+
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+    expect(body.variables).not.toHaveProperty('categories');
+  });
+
+  it('should request server-side nsfw filtering when safemode is active', async () => {
+    saveConfig({ discover: 'editors_choice', safemode: true, editorsCat: '' });
+    const fetchMock = stubEditorsResponse();
+
+    await getImages(false);
+
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).variables.excludeNsfw).toBe(true);
+  });
+
+  it('should use the saved cursor for the next editors choice query', async () => {
+    saveConfig({ discover: 'editors_choice', editorsCat: '', cursor: 'Y3Vyc29yMQ==' });
+    const fetchMock = stubEditorsResponse();
+
+    await getImages(true);
+
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).variables.after).toBe('Y3Vyc29yMQ==');
+  });
+
+  it('should save the cursor from the editors choice pageInfo', async () => {
+    const config = getConfig();
+    saveConfig({ discover: 'editors_choice', editorsCat: '', cursor: false });
+    stubEditorsResponse({ endCursor: 'Y3Vyc29yMg==', hasNextPage: true, hasPreviousPage: false });
+
+    await getImages(false);
+
+    expect(config.cursor).toBe('Y3Vyc29yMg==');
+  });
+
+  it('should clear the cursor when the editors choice has no next page', async () => {
+    const config = getConfig();
+    saveConfig({ discover: 'editors_choice', editorsCat: '', cursor: 'Y3Vyc29yMg==' });
+    stubEditorsResponse({ endCursor: 'Y3Vyc29yMg==', hasNextPage: false, hasPreviousPage: true });
+
+    await getImages(true);
+
+    expect(config.cursor).toBe(false);
+  });
+})

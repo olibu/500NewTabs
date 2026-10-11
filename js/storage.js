@@ -42,6 +42,7 @@ async function loadConfig() {
     lastPos: -1,                // the last position shown form the image cache (-1 if no picture has been shown)
     maxPos: 0,                  // the largest position in the cache which has been shown
     cursor: false,              // the search index of the last search for pagination
+    editorsCat: '',             // comma separated categories for the editors choice (empty = all)
     cGalleryUrl: '',            // URL of the gallery defined by the user
     cGalleryId: '',             // id of the gallery owner defined by the user
     cGallerySlug: ''            // slug (name of the gallery) of the gallery defined by the user
@@ -185,6 +186,27 @@ async function getImages(useCursor) {
         query = `{"operationName":"leaderboardHeroPhotos","variables":{"after":"${config.cursor}","first":${MAX_IMAGES},"type":"${type}","excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"query leaderboardHeroPhotos($type: LeaderboardType!, $first: Int! = 50, $after: String, $excludeNsfw: Boolean) { leaderboardPage(type: $type, first: $first, after: $after, excludeNsfw: $excludeNsfw) { edges { node { owner { displayName username } photo { id urls { size_1024 } isNsfw } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }"}`;
       }
     }
+  } else if (config.discover === 'editors_choice') {
+    // editors choice mode: optional list of categories (empty = all categories)
+
+    // build the optional categories part of the variables, omit it if none is selected
+    let categories = '';
+    if (config.editorsCat && config.editorsCat !== '0') {
+      categories = `"categories":[${config.editorsCat.split(',').map((c) => `"${c}"`).join(',')}],`;
+    }
+
+    const editorsQuery = `query editorsChoices($first: Int!, $after: String, $resourceTypes: [EditorsChoiceResourceType!], $categories: [String!], $excludeNsfw: Boolean) { editorsChoices( first: $first   after: $after   resourceTypes: $resourceTypes   categories: $categories   excludeNsfw: $excludeNsfw ) { edges { node { resource { ... on Photo { id   urls { size_4k   size_2048 }   uploader {displayName} } } } } pageInfo { endCursor   hasNextPage   hasPreviousPage } } }`;
+
+    // define the query for the editors choice
+    query = `{"operationName":"editorsChoices","variables":{"after":null,"first":${MAX_IMAGES},"resourceTypes":["PHOTO"],${categories}"excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"${editorsQuery}"}`;
+
+    // in case of available cursor, use the cursor query
+    if (useCursor) {
+      console.log("Cursor", config.cursor);
+      if (config.cursor) {
+        query = `{"operationName":"editorsChoices","variables":{"after":"${config.cursor}","first":${MAX_IMAGES},"resourceTypes":["PHOTO"],${categories}"excludeNsfw":${excludeNsfw}},"extensions":{"clientLibrary":{"name":"@apollo/client","version":"4.1.6"}},"query":"${editorsQuery}"}`;
+      }
+    }
   } else {
     let galleryId = "TVF4RQHOYEp";
 
@@ -249,6 +271,12 @@ async function getImages(useCursor) {
       piCursor = result.data.leaderboardPage.pageInfo.endCursor;
       hasNextPage = result.data.leaderboardPage.pageInfo.hasNextPage;
     }
+  } else if (result.data && result.data.editorsChoices) {
+    nodes = result.data.editorsChoices.edges;
+    if (result.data.editorsChoices.pageInfo && result.data.editorsChoices.pageInfo.endCursor) {
+      piCursor = result.data.editorsChoices.pageInfo.endCursor;
+      hasNextPage = result.data.editorsChoices.pageInfo.hasNextPage;
+    }
   }
 
   if (!nodes) {
@@ -267,7 +295,8 @@ async function getImages(useCursor) {
   }
 
   for (let node of nodes) {
-    const item = node.node;
+    // editors choice wraps the photo into a resource, gallery and leaderboard do not
+    const item = node.node.resource ? node.node.resource : node.node;
     let url, author, link;
 
     if (item.photo) {

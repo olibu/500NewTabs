@@ -14,6 +14,7 @@ async function save_options() {
   var interval = parseInt(document.getElementById('interval').value);
   var random = document.getElementById('random').checked;
   var keepLastTab = document.getElementById('keepLastTab').checked;
+  var editorsCat = getSelectedCategories(document.getElementById('editors_categories'));
 
   if ( discover == 'cgallery') {
     if (cGalleryId === '') {
@@ -29,6 +30,7 @@ async function save_options() {
     safemode: safemode,
     discover: discover,
     cGalleryId: cGalleryId,
+    editorsCat: editorsCat,
     name: name,
     interval: interval,
     random: random, 
@@ -89,6 +91,28 @@ export function setSelectedValues(select, values) {
   }
 }
 
+// get the selected category slugs from the editors choice select box
+export function getSelectedCategories(select) {
+  let values = '';
+  for (let i=0; i < select.options.length; i++) {
+    if (select.options[i].selected) {
+      if (values != '') {
+        values += ',';
+      }
+      values += select.options[i].value;
+    }
+  }
+  return values;
+}
+
+// set the selected category slugs of the editors choice select box
+export function setSelectedCategories(select, values) {
+  const selected = values ? values.split(',') : [];
+  for (let i=0; i < select.options.length; i++) {
+    select.options[i].selected = selected.includes(select.options[i].value);
+  }
+}
+
 // show text in status span for 2 seconds
 function showStatus(text) {
   var status = document.getElementById('status');
@@ -114,6 +138,7 @@ async function restore_options() {
   document.getElementById('interval').value = config.interval;
   document.getElementById('random').checked = config.random;
   document.getElementById('keepLastTab').checked = config.keepLastTab;
+  setSelectedCategories(document.getElementById('editors_categories'), config.editorsCat);
   updateCategory();
 
 }
@@ -157,8 +182,10 @@ async function update_cache() {
 function updateCategory() {
   const discover = document.getElementById('discover').value;
   const cgalleryid = document.getElementById('cgalleryid');
+  const editorsCategories = document.getElementById('editors_categories');
 
   cgalleryid.disabled = (discover !== 'cgallery');
+  editorsCategories.disabled = (discover !== 'editors_choice');
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);

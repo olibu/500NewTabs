@@ -68,6 +68,7 @@
                 <select id="discover" style="width: 200px">
                   <option value="leaderboard_weekly" data-i18n="options_discover_8">Leaderboard Weekly</option>
                   <option value="leaderboard_monthly" data-i18n="options_discover_9">Leaderboard Monthly</option>
+                  <option value="editors_choice" data-i18n="options_discover_10">Editors' Choice</option>
                   <option value="gallery" data-i18n="options_discover_1">500px Gallery</option>
                   <option value="cgallery" data-i18n="options_discover_7">Custom Gallery</option>
                 </select>
@@ -83,6 +84,28 @@
             </div>
             <div class="column is-8">
               <input class="input" type="text" id="cgalleryid" disabled>
+            </div>
+
+            <div class="column is-4">
+              <label 
+                data-i18n="options_editors_categories"
+                class="has-tooltip-right has-tooltip-arrow has-tooltipl-multiline"
+                attr-i18n="data-tooltip:options_tooltip_editors_categories"
+              >Categories</label>
+            </div>
+            <div class="column is-8">
+              <div class="select is-multiple">
+                <select id="editors_categories" multiple size="8" disabled>
+                  <option value="landscape" data-i18n="options_editors_cat_landscape">Landscape</option>
+                  <option value="city" data-i18n="options_editors_cat_city">City</option>
+                  <option value="people" data-i18n="options_editors_cat_people">People</option>
+                  <option value="events" data-i18n="options_editors_cat_events">Events</option>
+                  <option value="still life" data-i18n="options_editors_cat_still_life">Still Life</option>
+                  <option value="nature" data-i18n="options_editors_cat_nature">Nature</option>
+                  <option value="sports" data-i18n="options_editors_cat_sports">Sports</option>
+                  <option value="creative" data-i18n="options_editors_cat_creative">Creative</option>
+                </select>
+              </div>
             </div>
 
             <div class="column is-4">

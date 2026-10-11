@@ -227,6 +227,39 @@
   "options_discover_9": {
     "message": "Leaderboard Monthly"
   },
+  "options_discover_10": {
+    "message": "Editors' Choice"
+  },
+  "options_editors_categories": {
+    "message": "Categories"
+  },
+  "options_tooltip_editors_categories": {
+    "message": "Show images only from the selected categories. \nIf none is selected all categories are shown.\nOnly available in Editors' Choice mode."
+  },
+  "options_editors_cat_landscape": {
+    "message": "Landscape"
+  },
+  "options_editors_cat_city": {
+    "message": "City"
+  },
+  "options_editors_cat_people": {
+    "message": "People"
+  },
+  "options_editors_cat_events": {
+    "message": "Events"
+  },
+  "options_editors_cat_still_life": {
+    "message": "Still Life"
+  },
+  "options_editors_cat_nature": {
+    "message": "Nature"
+  },
+  "options_editors_cat_sports": {
+    "message": "Sports"
+  },
+  "options_editors_cat_creative": {
+    "message": "Creative"
+  },
   "options_custom_gallery": {
     "message": "Custom Gallery ID"
   },
